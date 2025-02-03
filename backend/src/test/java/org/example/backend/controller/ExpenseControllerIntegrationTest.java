@@ -5,6 +5,7 @@ import org.example.backend.repository.ExpenseRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -13,8 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureDataMongo
 public class ExpenseControllerIntegrationTest {
 
     @Autowired
@@ -28,10 +31,12 @@ public class ExpenseControllerIntegrationTest {
         expenseRepository.deleteAll();
     }
 
+
+
     @Test
     void shouldSaveExpense() throws Exception {
         mockMvc.perform(post("/api/expenses")
-                        .contentType(MediaType.APPLICATION_JSON) // Use MediaType
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"Groceries\",\"amount\":50.0,\"category\":\"Food\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Groceries"))
@@ -67,7 +72,7 @@ public class ExpenseControllerIntegrationTest {
     void shouldReturnNotFoundWhenExpenseDoesNotExist() throws Exception {
         mockMvc.perform(get("/api/expenses/nonexistent-id"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Expense not found with id: nonexistent-id")); // Check content
+                .andExpect(content().string("Expense not found with id: nonexistent-id"));
     }
 
     @Test
@@ -76,7 +81,7 @@ public class ExpenseControllerIntegrationTest {
         Expense savedExpense = expenseRepository.save(expense);
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
-                        .contentType(MediaType.APPLICATION_JSON) // Use MediaType
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"Restaurant\",\"amount\":75.0,\"category\":\"Food\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Restaurant"))
@@ -87,10 +92,10 @@ public class ExpenseControllerIntegrationTest {
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
         mockMvc.perform(put("/api/expenses/nonexistent-id")
-                        .contentType(MediaType.APPLICATION_JSON) // Use MediaType
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"Restaurant\",\"amount\":75.0,\"category\":\"Food\"}"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Expense not found with id: nonexistent-id")); // Check Content
+                .andExpect(content().string("Expense not found with id: nonexistent-id"));
     }
 
     @Test
@@ -109,6 +114,6 @@ public class ExpenseControllerIntegrationTest {
     void shouldReturnNotFoundWhenDeletingNonexistentExpense() throws Exception {
         mockMvc.perform(delete("/api/expenses/nonexistent-id"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Expense not found with id: nonexistent-id")); // Check content
+                .andExpect(content().string("Expense not found with id: nonexistent-id"));
     }
 }

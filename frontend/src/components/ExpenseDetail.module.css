@@ -1,0 +1,34 @@
+.expenseDetail {
+    max-width: 500px;
+    width: 100%;
+    margin: 20px;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.expenseDetail h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.expenseDetail p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}

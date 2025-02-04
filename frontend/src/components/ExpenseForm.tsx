@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
+import styles from './ExpenseForm.module.css';
 
 interface ExpenseFormProps {
     initialData?: ExpenseDTO;
@@ -10,10 +11,32 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
     const [formData, setFormData] = useState<ExpenseDTO>(
         initialData || { description: '', amount: 0, category: '' }
     );
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const categories = [
+        'Food',
+        'Hobbies',
+        'Travel',
+        'Transportation',
+        'School',
+        'College',
+        'Cinema',
+        'Park',
+    ];
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+
+
+        if (name === 'category' && value === 'Other') {
+            setIsCustomCategory(true);
+            setFormData({ ...formData, category: '' });
+        } else if (name === 'category') {
+            setIsCustomCategory(false); // Switch back to dropdown
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -22,8 +45,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
+        <form className={styles.expenseForm} onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
                 <label>Description</label>
                 <input
                     type="text"
@@ -33,7 +56,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
                     required
                 />
             </div>
-            <div>
+            <div className={styles.formGroup}>
                 <label>Amount</label>
                 <input
                     type="number"
@@ -43,17 +66,39 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
                     required
                 />
             </div>
-            <div>
+            <div className={styles.formGroup}>
                 <label>Category</label>
-                <input
-                    type="text"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    required
-                />
+                {isCustomCategory ? (
+                    <input
+                        type="text"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        placeholder="Enter category"
+                        required
+                    />
+                ) : (
+                    <select
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="" disabled>
+                            Select a category
+                        </option>
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                        <option value="Other">Other</option>
+                    </select>
+                )}
             </div>
-            <button type="submit">Save</button>
+            <button type="submit" className={styles.saveButton}>
+                Save
+            </button>
         </form>
     );
 };

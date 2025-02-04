@@ -1,5 +1,6 @@
 package org.example.backend.service;
 
+import org.example.backend.dto.ExpenseDTO;
 import org.example.backend.exception.ExpenseNotFoundException;
 import org.example.backend.model.Expense;
 import org.example.backend.repository.ExpenseRepository;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,7 @@ class ExpenseServiceTest {
     private ExpenseService expenseService;
 
     private Expense expense;
+    private ExpenseDTO expenseDTO;
 
     @BeforeEach
     void setUp() {
@@ -34,6 +37,8 @@ class ExpenseServiceTest {
         expense.setDescription("Groceries");
         expense.setAmount(50.0);
         expense.setCategory("Food");
+
+        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food");
     }
 
     @Test
@@ -42,15 +47,15 @@ class ExpenseServiceTest {
         expenses.add(expense);
         when(expenseRepository.findAll()).thenReturn(expenses);
 
-        List<Expense> result = expenseService.getAllExpenses();
+        List<ExpenseDTO> result = expenseService.getAllExpenses();
         assertEquals(1, result.size());
         assertEquals("Groceries", result.getFirst().getDescription());
     }
 
     @Test
     void testSaveExpense() {
-        when(expenseRepository.save(expense)).thenReturn(expense);
-        Expense result = expenseService.saveExpense(expense);
+        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+        ExpenseDTO result = expenseService.saveExpense(expenseDTO);
         assertNotNull(result);
         assertEquals("Groceries", result.getDescription());
     }
@@ -58,7 +63,7 @@ class ExpenseServiceTest {
     @Test
     void testGetExpenseByIdFound() {
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
-        Optional<Expense> result = expenseService.getExpenseById("1");
+        Optional<ExpenseDTO> result = expenseService.getExpenseById("1");
         assertTrue(result.isPresent());
         assertEquals("Groceries", result.get().getDescription());
     }
@@ -66,7 +71,7 @@ class ExpenseServiceTest {
     @Test
     void testGetExpenseByIdNotFound() {
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
-        Optional<Expense> result = expenseService.getExpenseById("2");
+        Optional<ExpenseDTO> result = expenseService.getExpenseById("2");
         assertFalse(result.isPresent());
     }
 
@@ -88,14 +93,17 @@ class ExpenseServiceTest {
     @Test
     void testUpdateExpenseSuccess() {
         Expense updatedExpense = new Expense();
+        updatedExpense.setId("1");
         updatedExpense.setDescription("Updated");
         updatedExpense.setAmount(100.0);
         updatedExpense.setCategory("Updated Category");
 
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category");
+
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
         when(expenseRepository.save(any(Expense.class))).thenReturn(updatedExpense);
 
-        Expense result = expenseService.updateExpense("1", updatedExpense);
+        ExpenseDTO result = expenseService.updateExpense("1", updatedExpenseDTO);
         assertEquals("Updated", result.getDescription());
         assertEquals(100.0, result.getAmount());
         assertEquals("Updated Category", result.getCategory());
@@ -103,8 +111,8 @@ class ExpenseServiceTest {
 
     @Test
     void testUpdateExpenseNotFound() {
-        Expense updatedExpense = new Expense();
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category");
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
-        assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpense));
+        assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }
 }

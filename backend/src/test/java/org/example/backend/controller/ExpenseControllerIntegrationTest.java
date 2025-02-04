@@ -9,15 +9,16 @@ import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataM
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureDataMongo
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ExpenseControllerIntegrationTest {
 
     @Autowired
@@ -30,8 +31,6 @@ public class ExpenseControllerIntegrationTest {
     void tearDown() {
         expenseRepository.deleteAll();
     }
-
-
 
     @Test
     void shouldSaveExpense() throws Exception {

@@ -1,26 +1,16 @@
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchExpenses, deleteExpense } from '../api/expenseApi';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseList.module.css';
 
-const ExpenseList: React.FC = () => {
-    const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
+interface ExpenseListProps {
+    expenses: ExpenseDTO[];
+    onDelete: (id: string) => Promise<void>;
+    onEdit: (expense: ExpenseDTO) => void;
+}
+
+const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete, onEdit }) => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const getExpenses = async () => {
-            const data = await fetchExpenses();
-            setExpenses(data);
-        };
-        getExpenses();
-    }, []);
-
-    const handleDelete = async (id: string) => {
-        await deleteExpense(id);
-        setExpenses(expenses.filter((expense) => expense.id !== id));
-    };
 
     return (
         <div className={styles.expenseList}>
@@ -33,9 +23,9 @@ const ExpenseList: React.FC = () => {
             <ul>
                 {expenses.map((expense) => (
                     <li key={expense.id} className={styles.expenseItem}>
-            <span>
-              {expense.description} - ${expense.amount} ({expense.category})
-            </span>
+                        <span>
+                          {expense.description} - ${expense.amount} ({expense.category})
+                        </span>
                         <div>
                             <button
                                 className={styles.viewButton}
@@ -45,13 +35,13 @@ const ExpenseList: React.FC = () => {
                             </button>
                             <button
                                 className={styles.editButton}
-                                onClick={() => navigate(`/edit/${expense.id}`)}
+                                onClick={() => onEdit(expense)}
                             >
                                 Edit
                             </button>
                             <button
                                 className={styles.deleteButton}
-                                onClick={() => handleDelete(expense.id!)}
+                                onClick={() => onDelete(expense.id!)}
                             >
                                 Delete
                             </button>

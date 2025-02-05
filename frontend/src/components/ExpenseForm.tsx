@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseForm.module.css';
+import { categories } from '../constants'; // Import categories
 
 interface ExpenseFormProps {
     initialData?: ExpenseDTO;
@@ -13,24 +15,11 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
     );
     const [isCustomCategory, setIsCustomCategory] = useState(false);
 
-    const categories = [
-        'Groceries',
-        'Hobbies',
-        'Travelling',
-        'Transportation',
-        'School',
-        'College',
-        'Car',
-        'Friends',
-
-    ];
-
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-
 
         if (name === 'category' && value === 'Other') {
             setIsCustomCategory(true);

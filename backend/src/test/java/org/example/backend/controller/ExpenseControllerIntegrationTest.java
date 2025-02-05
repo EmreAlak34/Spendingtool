@@ -38,7 +38,6 @@ class ExpenseControllerIntegrationTest {
     void setUp() {
         expenseRepository.deleteAll();
         testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food");
-        testExpenseTravel = new ExpenseDTO(null, "Flight Ticket", 200.0, "Travel");
     }
 
     @AfterEach
@@ -147,7 +146,6 @@ class ExpenseControllerIntegrationTest {
         mockMvc.perform(delete("/api/expenses/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
-
 
 
 }

@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,12 +30,14 @@ class ExpenseControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ExpenseDTO testExpense;
+    private ExpenseDTO testExpenseFood;
+    private ExpenseDTO testExpenseTravel;
 
     @BeforeEach
     void setUp() {
         expenseRepository.deleteAll();
-        testExpense = new ExpenseDTO(null, "Groceries", 50.0, "Food");
+        testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food");
+        testExpenseTravel = new ExpenseDTO(null, "Flight Ticket", 200.0, "Travel");
     }
 
     @AfterEach
@@ -45,7 +49,7 @@ class ExpenseControllerIntegrationTest {
     void shouldSaveExpense() throws Exception {
         mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpense)))
+                        .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.description").value("Groceries"))
@@ -55,10 +59,9 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldGetAllExpenses() throws Exception {
-
         mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpense)))
+                        .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/expenses"))
@@ -71,10 +74,9 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldGetExpenseById() throws Exception {
-
         String response = mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpense)))
+                        .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andReturn().getResponse().getContentAsString();
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
@@ -95,15 +97,14 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldUpdateExpense() throws Exception {
-
         String response = mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpense)))
+                        .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andReturn().getResponse().getContentAsString();
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
-        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Updated Category");
+        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Food");
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +112,7 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Updated Description"))
                 .andExpect(jsonPath("$.amount").value(75.0))
-                .andExpect(jsonPath("$.category").value("Updated Category"));
+                .andExpect(jsonPath("$.category").value("Food"));
     }
 
     @Test
@@ -126,10 +127,9 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldDeleteExpense() throws Exception {
-
         String response = mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpense)))
+                        .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andReturn().getResponse().getContentAsString();
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
@@ -145,5 +145,25 @@ class ExpenseControllerIntegrationTest {
     void shouldReturnNotFoundWhenDeletingNonexistentExpense() throws Exception {
         mockMvc.perform(delete("/api/expenses/nonexistent-id"))
                 .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void shouldGetDistinctCategories() throws Exception {
+
+        mockMvc.perform(post("/api/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testExpenseFood)))
+                .andExpect(status().isOk());
+        mockMvc.perform(post("/api/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testExpenseTravel)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/expenses/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[?(@=='Food')]").exists())
+                .andExpect(jsonPath("$[?(@=='Travel')]").exists());
     }
 }

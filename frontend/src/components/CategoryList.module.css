@@ -1,0 +1,34 @@
+.categoryList {
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.categoryList h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.categoryList ul {
+    list-style: none;
+    padding: 0;
+}
+
+.categoryList li {
+    margin-bottom: 8px;
+}
+
+.categoryList button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.categoryList button:hover {
+    background-color: #0056b3;
+}

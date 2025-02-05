@@ -1,20 +1,29 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchExpenses, deleteExpense } from '../api/expenseApi';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseList.module.css';
 
-const ExpenseList: React.FC = () => {
+interface ExpenseListProps {
+    category?: string;
+}
+
+const ExpenseList: React.FC<ExpenseListProps> = ({ category }) => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const getExpenses = async () => {
             const data = await fetchExpenses();
-            setExpenses(data);
+            if (category) {
+                setExpenses(data.filter(exp => exp.category === category));
+            } else {
+                setExpenses(data);
+            }
         };
         getExpenses();
-    }, []);
+    }, [category]);
 
     const handleDelete = async (id: string) => {
         await deleteExpense(id);
@@ -24,7 +33,7 @@ const ExpenseList: React.FC = () => {
     return (
         <div className={styles.expenseList}>
             <div className={styles.header}>
-                <h1>Expenses</h1>
+                <h1>{category ? `Expenses for ${category}` : 'All Expenses'}</h1>
                 <button className={styles.addButton} onClick={() => navigate('/add')}>
                     Add Expense
                 </button>

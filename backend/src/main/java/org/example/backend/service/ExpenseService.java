@@ -6,7 +6,7 @@ import org.example.backend.model.Expense;
 import org.example.backend.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,7 +22,7 @@ public class ExpenseService {
         expense.setDescription(expenseDTO.getDescription());
         expense.setAmount(expenseDTO.getAmount());
         expense.setCategory(expenseDTO.getCategory());
-        expense.setCreatedAt(LocalDateTime.now()); // Set creation timestamp
+        expense.setCreatedAt(LocalDate.now());
         Expense savedExpense = expenseRepository.save(expense);
         return mapToDTO(savedExpense);
     }
@@ -73,7 +73,7 @@ public class ExpenseService {
                 expense.getDescription(),
                 expense.getAmount(),
                 expense.getCategory(),
-                expense.getCreatedAt() // Include createdAt in DTO
+                expense.getCreatedAt()
         );
     }
 }

@@ -38,7 +38,6 @@ class ExpenseControllerIntegrationTest {
     void setUp() {
         expenseRepository.deleteAll();
         testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food");
-        testExpenseTravel = new ExpenseDTO(null, "Flight Ticket", 200.0, "Travel");
     }
 
     @AfterEach
@@ -149,19 +148,4 @@ class ExpenseControllerIntegrationTest {
     }
 
 
-    @Test
-    void shouldGetDistinctCategories() throws Exception {
-        // Create two expenses with different categories
-        mockMvc.perform(post("/api/expenses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpenseFood)))
-                .andExpect(status().isOk());
-        mockMvc.perform(post("/api/expenses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpenseTravel)))
-                .andExpect(status().isOk());
-
-
-
-
-}}
+}

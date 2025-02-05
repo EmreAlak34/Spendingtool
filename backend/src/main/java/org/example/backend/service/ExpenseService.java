@@ -60,13 +60,6 @@ public class ExpenseService {
 
 
 
-    public List<String> getDistinctCategories() {
-        List<Expense> expenses = expenseRepository.findAll();
-        return expenses.stream()
-                .map(Expense::getCategory)
-                .distinct()
-                .collect(Collectors.toList());
-    }
 
 
 

@@ -110,7 +110,8 @@ class ExpenseServiceTest {
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }
 
-    // New test for distinct categories
+
+   
     @Test
     void testGetDistinctCategories() {
         List<Expense> expenses = Arrays.asList(expenseFood, expenseTravel, expenseFood);
@@ -120,4 +121,12 @@ class ExpenseServiceTest {
         assertTrue(distinctCategories.contains("Food"));
         assertTrue(distinctCategories.contains("Travel"));
     }
+
+
 }
+
+
+
+
+
+

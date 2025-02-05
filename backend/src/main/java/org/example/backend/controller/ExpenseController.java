@@ -26,10 +26,7 @@ public class ExpenseController {
         return expenseService.getAllExpenses();
     }
 
-    @GetMapping("/categories")
-    public List<String> getCategories() {
-        return expenseService.getDistinctCategories();
-    }
+
 
     @PostMapping
     public ExpenseDTO saveExpense(@RequestBody ExpenseDTO expenseDTO) {

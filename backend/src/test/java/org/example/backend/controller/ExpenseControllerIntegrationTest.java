@@ -149,22 +149,5 @@ class ExpenseControllerIntegrationTest {
     }
 
 
-    @Test
-    void shouldGetDistinctCategories() throws Exception {
 
-        mockMvc.perform(post("/api/expenses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpenseFood)))
-                .andExpect(status().isOk());
-        mockMvc.perform(post("/api/expenses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpenseTravel)))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/api/expenses/categories"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[?(@=='Food')]").exists())
-                .andExpect(jsonPath("$[?(@=='Travel')]").exists());
-    }
 }

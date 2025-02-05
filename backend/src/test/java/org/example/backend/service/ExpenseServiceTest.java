@@ -114,14 +114,6 @@ class ExpenseServiceTest {
 
 
 
-    @Test
-    void testGetDistinctCategories() {
-        List<Expense> expenses = Arrays.asList(expenseFood, expenseTravel, expenseFood);
-        when(expenseRepository.findAll()).thenReturn(expenses);
-        List<String> distinctCategories = expenseService.getDistinctCategories();
-        assertEquals(2, distinctCategories.size());
-        assertTrue(distinctCategories.contains("Food"));
-        assertTrue(distinctCategories.contains("Travel"));
-    }
-}
+
+
 

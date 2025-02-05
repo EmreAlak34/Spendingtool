@@ -54,4 +54,6 @@ public class ExpenseController {
     public ResponseEntity<String> handleExpenseNotFound(ExpenseNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+
 }

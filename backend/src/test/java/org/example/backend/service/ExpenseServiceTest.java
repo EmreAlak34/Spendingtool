@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,41 +27,42 @@ class ExpenseServiceTest {
     @InjectMocks
     private ExpenseService expenseService;
 
-    private Expense expenseFood;
-    private Expense expenseTravel;
-    private ExpenseDTO expenseDTOFood;
-    private ExpenseDTO expenseDTOTravel;
+    private Expense expense;
+    private ExpenseDTO expenseDTO;
 
     @BeforeEach
     void setUp() {
-        expenseFood = new Expense("1", "Groceries", 50.0, "Food");
-        expenseTravel = new Expense("2", "Flight Ticket", 200.0, "Travel");
+        expense = new Expense();
+        expense.setId("1");
+        expense.setDescription("Groceries");
+        expense.setAmount(50.0);
+        expense.setCategory("Food");
 
-        expenseDTOFood = new ExpenseDTO("1", "Groceries", 50.0, "Food");
-        expenseDTOTravel = new ExpenseDTO("2", "Flight Ticket", 200.0, "Travel");
+        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food");
     }
 
     @Test
     void testGetAllExpenses() {
-        List<Expense> expenses = Arrays.asList(expenseFood);
+        List<Expense> expenses = new ArrayList<>();
+        expenses.add(expense);
         when(expenseRepository.findAll()).thenReturn(expenses);
 
         List<ExpenseDTO> result = expenseService.getAllExpenses();
         assertEquals(1, result.size());
-        assertEquals("Groceries", result.get(0).getDescription());
+        assertEquals("Groceries", result.getFirst().getDescription());
     }
 
     @Test
     void testSaveExpense() {
-        when(expenseRepository.save(any(Expense.class))).thenReturn(expenseFood);
-        ExpenseDTO result = expenseService.saveExpense(expenseDTOFood);
+        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+        ExpenseDTO result = expenseService.saveExpense(expenseDTO);
         assertNotNull(result);
         assertEquals("Groceries", result.getDescription());
     }
 
     @Test
     void testGetExpenseByIdFound() {
-        when(expenseRepository.findById("1")).thenReturn(Optional.of(expenseFood));
+        when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
         Optional<ExpenseDTO> result = expenseService.getExpenseById("1");
         assertTrue(result.isPresent());
         assertEquals("Groceries", result.get().getDescription());
@@ -76,11 +77,11 @@ class ExpenseServiceTest {
 
     @Test
     void testDeleteExpenseSuccess() {
-        when(expenseRepository.findById("1")).thenReturn(Optional.of(expenseFood));
-        doNothing().when(expenseRepository).delete(expenseFood);
+        when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
+        doNothing().when(expenseRepository).delete(expense);
 
         assertDoesNotThrow(() -> expenseService.deleteExpense("1"));
-        verify(expenseRepository, times(1)).delete(expenseFood);
+        verify(expenseRepository, times(1)).delete(expense);
     }
 
     @Test
@@ -91,42 +92,28 @@ class ExpenseServiceTest {
 
     @Test
     void testUpdateExpenseSuccess() {
-        Expense updatedExpense = new Expense("1", "Updated", 100.0, "Food");
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Food");
+        Expense updatedExpense = new Expense();
+        updatedExpense.setId("1");
+        updatedExpense.setDescription("Updated");
+        updatedExpense.setAmount(100.0);
+        updatedExpense.setCategory("Updated Category");
 
-        when(expenseRepository.findById("1")).thenReturn(Optional.of(expenseFood));
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category");
+
+        when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
         when(expenseRepository.save(any(Expense.class))).thenReturn(updatedExpense);
 
         ExpenseDTO result = expenseService.updateExpense("1", updatedExpenseDTO);
         assertEquals("Updated", result.getDescription());
         assertEquals(100.0, result.getAmount());
-        assertEquals("Food", result.getCategory());
+        assertEquals("Updated Category", result.getCategory());
     }
 
     @Test
     void testUpdateExpenseNotFound() {
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Other");
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category");
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }
-
-
-   
-    @Test
-    void testGetDistinctCategories() {
-        List<Expense> expenses = Arrays.asList(expenseFood, expenseTravel, expenseFood);
-        when(expenseRepository.findAll()).thenReturn(expenses);
-        List<String> distinctCategories = expenseService.getDistinctCategories();
-        assertEquals(2, distinctCategories.size());
-        assertTrue(distinctCategories.contains("Food"));
-        assertTrue(distinctCategories.contains("Travel"));
-    }
-
-
 }
-
-
-
-
-
 

@@ -14,14 +14,15 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
     const [isCustomCategory, setIsCustomCategory] = useState(false);
 
     const categories = [
-        'Food',
+        'Groceries',
         'Hobbies',
-        'Travel',
+        'Travelling',
         'Transportation',
         'School',
         'College',
-        'Cinema',
-        'Park',
+        'Car',
+        'Friends',
+
     ];
 
     const handleChange = (
@@ -35,7 +36,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
             setIsCustomCategory(true);
             setFormData({ ...formData, category: '' });
         } else if (name === 'category') {
-            setIsCustomCategory(false); // Switch back to dropdown
+            setIsCustomCategory(false);
         }
     };
 

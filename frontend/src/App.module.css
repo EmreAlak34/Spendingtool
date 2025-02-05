@@ -6,9 +6,7 @@
     align-items: stretch;
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     padding: 20px;
-
 }
-
 
 .navbar {
     width: 100%;
@@ -35,6 +33,5 @@
 
 .navButton:hover {
     background-color: #0056b3;
-    transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

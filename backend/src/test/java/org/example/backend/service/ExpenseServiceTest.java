@@ -110,6 +110,9 @@ class ExpenseServiceTest {
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }
 
+}
+
+
 
     @Test
     void testGetDistinctCategories() {
@@ -121,3 +124,4 @@ class ExpenseServiceTest {
         assertTrue(distinctCategories.contains("Travel"));
     }
 }
+

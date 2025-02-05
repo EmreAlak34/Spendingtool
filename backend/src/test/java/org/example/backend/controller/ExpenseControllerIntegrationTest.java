@@ -12,9 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
-
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -36,8 +33,7 @@ class ExpenseControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         expenseRepository.deleteAll();
-        testExpense = new ExpenseDTO(null, "Groceries", 50.0, "Food", LocalDate.now());
-
+        testExpense = new ExpenseDTO(null, "Groceries", 50.0, "Food");
     }
 
     @AfterEach
@@ -54,12 +50,12 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.description").value("Groceries"))
                 .andExpect(jsonPath("$.amount").value(50.0))
-                .andExpect(jsonPath("$.category").value("Food"))
-                .andExpect(jsonPath("$.createdAt").exists());
+                .andExpect(jsonPath("$.category").value("Food"));
     }
 
     @Test
     void shouldGetAllExpenses() throws Exception {
+
         mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpense)))
@@ -70,12 +66,12 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].description").value("Groceries"))
                 .andExpect(jsonPath("$[0].amount").value(50.0))
-                .andExpect(jsonPath("$[0].category").value("Food"))
-                .andExpect(jsonPath("$[0].createdAt").exists());
+                .andExpect(jsonPath("$[0].category").value("Food"));
     }
 
     @Test
     void shouldGetExpenseById() throws Exception {
+
         String response = mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpense)))
@@ -88,8 +84,7 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").value(savedExpense.getId()))
                 .andExpect(jsonPath("$.description").value("Groceries"))
                 .andExpect(jsonPath("$.amount").value(50.0))
-                .andExpect(jsonPath("$.category").value("Food"))
-                .andExpect(jsonPath("$.createdAt").exists());
+                .andExpect(jsonPath("$.category").value("Food"));
     }
 
     @Test
@@ -100,6 +95,7 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldUpdateExpense() throws Exception {
+
         String response = mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpense)))
@@ -107,8 +103,7 @@ class ExpenseControllerIntegrationTest {
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
-        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Updated Category", LocalDate.now());
-
+        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Updated Category");
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,14 +111,12 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Updated Description"))
                 .andExpect(jsonPath("$.amount").value(75.0))
-                .andExpect(jsonPath("$.category").value("Updated Category"))
-                .andExpect(jsonPath("$.createdAt").exists());
+                .andExpect(jsonPath("$.category").value("Updated Category"));
     }
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
-        ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
-
+        ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other");
 
         mockMvc.perform(put("/api/expenses/nonexistent-id")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -133,6 +126,7 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldDeleteExpense() throws Exception {
+
         String response = mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpense)))
@@ -141,7 +135,7 @@ class ExpenseControllerIntegrationTest {
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
         mockMvc.perform(delete("/api/expenses/" + savedExpense.getId()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/expenses/" + savedExpense.getId()))
                 .andExpect(status().isNotFound());
@@ -151,32 +145,5 @@ class ExpenseControllerIntegrationTest {
     void shouldReturnNotFoundWhenDeletingNonexistentExpense() throws Exception {
         mockMvc.perform(delete("/api/expenses/nonexistent-id"))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void shouldGetExpensesByCategory() throws Exception {
-
-        mockMvc.perform(post("/api/expenses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testExpense)))
-                .andExpect(status().isOk());
-
-
-        mockMvc.perform(get("/api/expenses/category/Food")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].description").value("Groceries"))
-                .andExpect(jsonPath("$[0].amount").value(50.0))
-                .andExpect(jsonPath("$[0].category").value("Food"))
-                .andExpect(jsonPath("$[0].createdAt").exists());
-    }
-
-    @Test
-    void shouldReturnEmptyListForNonExistingCategory() throws Exception {
-        mockMvc.perform(get("/api/expenses/category/NonExistingCategory")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
     }
 }

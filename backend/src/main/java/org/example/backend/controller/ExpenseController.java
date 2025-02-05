@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
+
     private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {
@@ -28,9 +30,12 @@ public class ExpenseController {
         return expenseService.saveExpense(expenseDTO);
     }
 
+
+
     @GetMapping("/{id}")
     public ExpenseDTO getExpenseById(@PathVariable String id) {
-        return expenseService.getExpenseById(id);
+        return expenseService.getExpenseById(id)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + id));
     }
 
     @PutMapping("/{id}")
@@ -38,19 +43,9 @@ public class ExpenseController {
         return expenseService.updateExpense(id, updatedExpenseDTO);
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteExpense(@PathVariable String id) {
-        if (!expenseService.expenseExists(id)) {
-            throw new ExpenseNotFoundException("Expense not found with id: " + id);
-        }
+    public void deleteExpense(@PathVariable String id) {
         expenseService.deleteExpense(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/category/{category}")
-    public List<ExpenseDTO> getExpensesByCategory(@PathVariable String category) {
-        return expenseService.getExpensesByCategory(category);
     }
 
     @ExceptionHandler(ExpenseNotFoundException.class)

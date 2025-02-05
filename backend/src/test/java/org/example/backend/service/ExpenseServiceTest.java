@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +37,8 @@ class ExpenseServiceTest {
         expense.setDescription("Groceries");
         expense.setAmount(50.0);
         expense.setCategory("Food");
-        expense.setCreatedAt(LocalDate.now());
 
-        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food", LocalDate.now());
+        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food");
     }
 
     @Test
@@ -65,35 +63,31 @@ class ExpenseServiceTest {
     @Test
     void testGetExpenseByIdFound() {
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
-        ExpenseDTO result = expenseService.getExpenseById("1");
-        assertNotNull(result);
-        assertEquals("Groceries", result.getDescription());
+        Optional<ExpenseDTO> result = expenseService.getExpenseById("1");
+        assertTrue(result.isPresent());
+        assertEquals("Groceries", result.get().getDescription());
     }
 
     @Test
     void testGetExpenseByIdNotFound() {
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
-        assertThrows(ExpenseNotFoundException.class, () -> expenseService.getExpenseById("2"));
+        Optional<ExpenseDTO> result = expenseService.getExpenseById("2");
+        assertFalse(result.isPresent());
     }
 
     @Test
     void testDeleteExpenseSuccess() {
-        when(expenseRepository.existsById("1")).thenReturn(true);
-        doNothing().when(expenseRepository).deleteById("1");
+        when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
+        doNothing().when(expenseRepository).delete(expense);
 
         assertDoesNotThrow(() -> expenseService.deleteExpense("1"));
-
-        verify(expenseRepository, times(1)).existsById("1");
-        verify(expenseRepository, times(1)).deleteById("1");
+        verify(expenseRepository, times(1)).delete(expense);
     }
 
     @Test
     void testDeleteExpenseNotFound() {
-        when(expenseRepository.existsById("2")).thenReturn(false);
-
+        when(expenseRepository.findById("2")).thenReturn(Optional.empty());
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.deleteExpense("2"));
-
-        verify(expenseRepository, never()).delete(any());
     }
 
     @Test
@@ -103,9 +97,8 @@ class ExpenseServiceTest {
         updatedExpense.setDescription("Updated");
         updatedExpense.setAmount(100.0);
         updatedExpense.setCategory("Updated Category");
-        updatedExpense.setCreatedAt(LocalDate.now());
 
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category", LocalDate.now());
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category");
 
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
         when(expenseRepository.save(any(Expense.class))).thenReturn(updatedExpense);
@@ -118,7 +111,7 @@ class ExpenseServiceTest {
 
     @Test
     void testUpdateExpenseNotFound() {
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category", LocalDate.now());
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category");
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }

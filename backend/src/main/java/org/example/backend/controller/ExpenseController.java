@@ -1,3 +1,4 @@
+
 package org.example.backend.controller;
 
 import org.example.backend.dto.ExpenseDTO;
@@ -29,7 +30,6 @@ public class ExpenseController {
     public ExpenseDTO saveExpense(@RequestBody ExpenseDTO expenseDTO) {
         return expenseService.saveExpense(expenseDTO);
     }
-
 
 
     @GetMapping("/{id}")

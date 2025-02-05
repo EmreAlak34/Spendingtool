@@ -1,3 +1,4 @@
+
 package org.example.backend.controller;
 
 import org.example.backend.dto.ExpenseDTO;
@@ -38,7 +39,7 @@ class ExpenseControllerIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        expenseRepository.deleteAll(); 
+        expenseRepository.deleteAll();
     }
 
     @Test

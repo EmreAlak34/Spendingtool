@@ -56,4 +56,12 @@ public class ExpenseService {
         Expense updatedExpense = expenseRepository.save(expense);
         return new ExpenseDTO(updatedExpense.getId(), updatedExpense.getDescription(), updatedExpense.getAmount(), updatedExpense.getCategory());
     }
+
+    public List<String> getDistinctCategories() {
+        List<Expense> expenses = expenseRepository.findAll();
+        return expenses.stream()
+                .map(Expense::getCategory)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 }

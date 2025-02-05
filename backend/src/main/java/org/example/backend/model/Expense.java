@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Document(collection = "expenses")
@@ -14,5 +14,5 @@ public class Expense {
     private String description;
     private double amount;
     private String category;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }

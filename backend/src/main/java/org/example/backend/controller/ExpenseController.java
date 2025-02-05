@@ -30,7 +30,7 @@ public class ExpenseController {
 
     @GetMapping("/{id}")
     public ExpenseDTO getExpenseById(@PathVariable String id) {
-        return expenseService.getExpenseById(id); // No need for .orElseThrow()
+        return expenseService.getExpenseById(id);
     }
 
     @PutMapping("/{id}")
@@ -45,7 +45,7 @@ public class ExpenseController {
             throw new ExpenseNotFoundException("Expense not found with id: " + id);
         }
         expenseService.deleteExpense(id);
-        return ResponseEntity.noContent().build(); // 204 No Content
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/category/{category}")

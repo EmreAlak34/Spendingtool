@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +38,9 @@ class ExpenseServiceTest {
         expense.setDescription("Groceries");
         expense.setAmount(50.0);
         expense.setCategory("Food");
+        expense.setCreatedAt(LocalDate.now());
 
-        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food");
+        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food", LocalDate.now());
     }
 
     @Test
@@ -85,7 +87,6 @@ class ExpenseServiceTest {
         verify(expenseRepository, times(1)).deleteById("1");
     }
 
-
     @Test
     void testDeleteExpenseNotFound() {
         when(expenseRepository.existsById("2")).thenReturn(false);
@@ -95,8 +96,6 @@ class ExpenseServiceTest {
         verify(expenseRepository, never()).delete(any());
     }
 
-
-
     @Test
     void testUpdateExpenseSuccess() {
         Expense updatedExpense = new Expense();
@@ -104,8 +103,9 @@ class ExpenseServiceTest {
         updatedExpense.setDescription("Updated");
         updatedExpense.setAmount(100.0);
         updatedExpense.setCategory("Updated Category");
+        updatedExpense.setCreatedAt(LocalDate.now());
 
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category");
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category", LocalDate.now());
 
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
         when(expenseRepository.save(any(Expense.class))).thenReturn(updatedExpense);
@@ -118,7 +118,7 @@ class ExpenseServiceTest {
 
     @Test
     void testUpdateExpenseNotFound() {
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category");
+        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category", LocalDate.now());
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }

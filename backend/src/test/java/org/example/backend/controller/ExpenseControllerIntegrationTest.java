@@ -12,7 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,7 +36,8 @@ class ExpenseControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         expenseRepository.deleteAll();
-        testExpense = new ExpenseDTO(null, "Groceries", 50.0, "Food", LocalDateTime.now());
+        testExpense = new ExpenseDTO(null, "Groceries", 50.0, "Food", LocalDate.now());
+
     }
 
     @AfterEach
@@ -105,7 +107,8 @@ class ExpenseControllerIntegrationTest {
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
-        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Updated Category", LocalDateTime.now());
+        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Updated Category", LocalDate.now());
+
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +122,8 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
-        ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDateTime.now());
+        ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
+
 
         mockMvc.perform(put("/api/expenses/nonexistent-id")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -173,6 +177,6 @@ class ExpenseControllerIntegrationTest {
         mockMvc.perform(get("/api/expenses/category/NonExistingCategory")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0)); // Expect an empty list
+                .andExpect(jsonPath("$.length()").value(0));
     }
 }

@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
-
     private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {
@@ -31,8 +30,7 @@ public class ExpenseController {
 
     @GetMapping("/{id}")
     public ExpenseDTO getExpenseById(@PathVariable String id) {
-        return expenseService.getExpenseById(id)
-                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found with id: " + id));
+        return expenseService.getExpenseById(id); // No need for .orElseThrow()
     }
 
     @PutMapping("/{id}")
@@ -40,9 +38,19 @@ public class ExpenseController {
         return expenseService.updateExpense(id, updatedExpenseDTO);
     }
 
+
     @DeleteMapping("/{id}")
-    public void deleteExpense(@PathVariable String id) {
+    public ResponseEntity<Void> deleteExpense(@PathVariable String id) {
+        if (!expenseService.expenseExists(id)) {
+            throw new ExpenseNotFoundException("Expense not found with id: " + id);
+        }
         expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
+    @GetMapping("/category/{category}")
+    public List<ExpenseDTO> getExpensesByCategory(@PathVariable String category) {
+        return expenseService.getExpensesByCategory(category);
     }
 
     @ExceptionHandler(ExpenseNotFoundException.class)

@@ -63,32 +63,39 @@ class ExpenseServiceTest {
     @Test
     void testGetExpenseByIdFound() {
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
-        Optional<ExpenseDTO> result = expenseService.getExpenseById("1");
-        assertTrue(result.isPresent());
-        assertEquals("Groceries", result.get().getDescription());
+        ExpenseDTO result = expenseService.getExpenseById("1");
+        assertNotNull(result);
+        assertEquals("Groceries", result.getDescription());
     }
 
     @Test
     void testGetExpenseByIdNotFound() {
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
-        Optional<ExpenseDTO> result = expenseService.getExpenseById("2");
-        assertFalse(result.isPresent());
+        assertThrows(ExpenseNotFoundException.class, () -> expenseService.getExpenseById("2"));
     }
 
     @Test
     void testDeleteExpenseSuccess() {
-        when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
-        doNothing().when(expenseRepository).delete(expense);
+        when(expenseRepository.existsById("1")).thenReturn(true);
+        doNothing().when(expenseRepository).deleteById("1");
 
         assertDoesNotThrow(() -> expenseService.deleteExpense("1"));
-        verify(expenseRepository, times(1)).delete(expense);
+
+        verify(expenseRepository, times(1)).existsById("1");
+        verify(expenseRepository, times(1)).deleteById("1");
     }
+
 
     @Test
     void testDeleteExpenseNotFound() {
-        when(expenseRepository.findById("2")).thenReturn(Optional.empty());
+        when(expenseRepository.existsById("2")).thenReturn(false);
+
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.deleteExpense("2"));
+
+        verify(expenseRepository, never()).delete(any());
     }
+
+
 
     @Test
     void testUpdateExpenseSuccess() {

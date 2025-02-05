@@ -57,6 +57,8 @@ public class ExpenseService {
         return new ExpenseDTO(updatedExpense.getId(), updatedExpense.getDescription(), updatedExpense.getAmount(), updatedExpense.getCategory());
     }
 
+
+
     public List<String> getDistinctCategories() {
         List<Expense> expenses = expenseRepository.findAll();
         return expenses.stream()
@@ -64,4 +66,5 @@ public class ExpenseService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
 }

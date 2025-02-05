@@ -147,10 +147,10 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-
+    // New test for categories endpoint
     @Test
     void shouldGetDistinctCategories() throws Exception {
-
+        // Create two expenses with different categories
         mockMvc.perform(post("/api/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpenseFood)))

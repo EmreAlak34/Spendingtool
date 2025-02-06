@@ -41,27 +41,12 @@ const CategoriesPage: React.FC = () => {
     return (
         <div>
             <h1>Categories</h1>
-
             <div style={{ marginBottom: '20px' }}>
-                <input
-                    type="text"
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    placeholder="New category name"
-                    className={styles.addCategoryInput}
-                />
-                <button onClick={handleAddCategory}>Add Category</button>
-            </div>
-
-            <div style={{ marginBottom: '20px' }}>
-                {localCategories.map(category => (
+                {categories.map(category => (
                     <button
                         key={category}
-                        onClick={() => {
-                            setSelectedCategory(category);
-                            navigate(`/categories?selectedCategory=${category}`);
-                        }}
-                        className={styles.categoryButton}
+                        onClick={() => setSelectedCategory(category)}
+                        style={{ marginRight: '10px' }}
                     >
                         {category}
                     </button>
@@ -79,7 +64,7 @@ const CategoriesPage: React.FC = () => {
                     </button>
                     <ExpenseList
                         expenses={expenses.filter(expense => expense.category === selectedCategory)}
-                        onDelete={handleDeleteExpense}
+                        onDelete={handleDelete}
                     />
                 </div>
             )}

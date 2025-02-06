@@ -40,25 +40,16 @@
     background-size: 12px;
 }
 
-.formGroup input:focus,
-.formGroup select:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.saveButton {
-    background-color: #28a745;
+.submitButton {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
     color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 500;
-    width: 100%;
-    margin-top: 1rem;
-    transition: background-color 0.15s ease-in-out;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
-.saveButton:hover {
-    background-color: #218838;
+.submitButton:hover {
+    background-color: #0056b3;
 }

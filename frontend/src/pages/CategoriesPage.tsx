@@ -12,13 +12,11 @@ const CategoriesPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Extract the selectedCategory from the query parameters
+
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const category = queryParams.get('selectedCategory');
-        if (category) {
-            setSelectedCategory(category);
-        }
+        setSelectedCategory(category); // Update state from URL!
     }, [location.search]);
 
     useEffect(() => {
@@ -37,7 +35,10 @@ const CategoriesPage: React.FC = () => {
                 {categories.map(category => (
                     <button
                         key={category}
-                        onClick={() => setSelectedCategory(category)}
+                        onClick={() => {
+                            setSelectedCategory(category);
+                            navigate(`/categories?selectedCategory=${category}`)
+                        }}
                         style={{ marginRight: '10px' }}
                     >
                         {category}

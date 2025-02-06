@@ -9,7 +9,6 @@ const AddExpensePage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-
     const queryParams = new URLSearchParams(location.search);
     const category = queryParams.get('category');
 
@@ -19,10 +18,11 @@ const AddExpensePage: React.FC = () => {
         }
         await createExpense(expenseDTO);
 
+
         if (category) {
             navigate(`/categories?selectedCategory=${category}`);
         } else {
-            navigate('/categories');
+            navigate('/'); // Redirect to the homepage
         }
     };
 

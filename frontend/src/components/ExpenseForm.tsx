@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseForm.module.css';
+import { categories } from '../constants';
 
 interface ExpenseFormProps {
     onSubmit: (expense: ExpenseDTO) => Promise<void>;
@@ -63,13 +65,17 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCa
                 <div className={styles.formGroup}>
                     <label>
                         Category:
-                        <input
-                            type="text"
+                        <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             required
                             className={styles.input}
-                        />
+                        >
+                            <option value="" disabled>Select a category</option> {/* Placeholder option */}
+                            {categories.map(cat => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
                     </label>
                 </div>
             )}

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchExpenseById, updateExpense } from '../api/expenseApi';
@@ -23,7 +24,7 @@ const EditExpensePage: React.FC = () => {
     const handleSubmit = async (updatedExpense: ExpenseDTO) => {
         if (id) {
             await updateExpense(id, updatedExpense);
-            // Redirect back to the category page after editing
+
             if (category) {
                 navigate(`/categories?selectedCategory=${category}`);
             } else {
@@ -39,7 +40,7 @@ const EditExpensePage: React.FC = () => {
     return (
         <div>
             <h1>Edit Expense</h1>
-            <ExpenseForm onSubmit={handleSubmit} initialData={expense} />
+            <ExpenseForm onSubmit={handleSubmit} initialData={expense} showCategoryField={!category} />
         </div>
     );
 };

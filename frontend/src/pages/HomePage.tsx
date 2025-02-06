@@ -1,17 +1,18 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './HomePage.module.css'
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div>
-            <h1>Home</h1>
-            <button onClick={() => navigate('/add-expense')} style={{ marginRight: '10px' }}>
+        <div className={styles.homePage}>
+
+            <button onClick={() => navigate('/add-expense')} >
                 Add Expense
             </button>
-            <button onClick={() => navigate('/categories')} style={{ marginRight: '10px' }}>
+            <button onClick={() => navigate('/categories')}>
                 Categories
             </button>
         </div>

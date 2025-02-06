@@ -1,37 +1,41 @@
-.app {
-    width: 100vw;
+
+
+.appWrapper {
     min-height: 100vh;
-    display: flex;
+    display:flex;
     flex-direction: column;
-    align-items: stretch;
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    padding: 20px;
 }
 
 .navbar {
-    width: 100%;
     background: white;
-    padding: 10px 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 20px;
+    z-index: 1000;
 }
 
-.navButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 500;
+.navLink {
+    color: #007bff;
+    font-size: 1.5rem;
+    font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease;
+
 }
 
-.navButton:hover {
-    background-color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.navLink:hover {
+    color: #0056b3;
+    transform: scale(1.05);
+}
+
+.contentWrapper {
+    padding-top: 75px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
 }

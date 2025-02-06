@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchExpenseById, updateExpense } from '../api/expenseApi';
@@ -11,7 +10,7 @@ const EditExpensePage: React.FC = () => {
     const location = useLocation();
     const [expense, setExpense] = useState<ExpenseDTO | null>(null);
 
-    // Extract the category from the query parameters
+
     const queryParams = new URLSearchParams(location.search);
     const category = queryParams.get('category');
 
@@ -24,7 +23,7 @@ const EditExpensePage: React.FC = () => {
     const handleSubmit = async (updatedExpense: ExpenseDTO) => {
         if (id) {
             await updateExpense(id, updatedExpense);
-
+            // Redirect back to the category page after editing
             if (category) {
                 navigate(`/categories?selectedCategory=${category}`);
             } else {

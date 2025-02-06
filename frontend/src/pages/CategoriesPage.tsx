@@ -12,7 +12,7 @@ const CategoriesPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-
+    // Extract the selectedCategory from the query parameters
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const category = queryParams.get('selectedCategory');

@@ -1,4 +1,4 @@
-// src/components/ExpenseForm.tsx
+
 import React, { useState } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseForm.module.css';

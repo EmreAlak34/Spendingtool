@@ -1,4 +1,4 @@
-// src/pages/EditExpensePage.tsx
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchExpenseById, updateExpense } from '../api/expenseApi';
@@ -24,11 +24,11 @@ const EditExpensePage: React.FC = () => {
     const handleSubmit = async (updatedExpense: ExpenseDTO) => {
         if (id) {
             await updateExpense(id, updatedExpense);
-            // Redirect back to the category page after editing
+
             if (category) {
                 navigate(`/categories?selectedCategory=${category}`);
             } else {
-                navigate('/categories'); // Fallback if no category is provided
+                navigate('/categories');
             }
         }
     };

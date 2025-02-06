@@ -1,4 +1,4 @@
-// src/pages/CategoriesPage.tsx
+
 import React, { useEffect, useState } from 'react';
 import { fetchExpenses, deleteExpense } from '../api/expenseApi';
 import ExpenseList from '../components/ExpenseList';
@@ -12,7 +12,7 @@ const CategoriesPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Extract the selectedCategory from the query parameters
+
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const category = queryParams.get('selectedCategory');

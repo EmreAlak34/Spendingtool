@@ -1,4 +1,4 @@
-// src/components/ExpenseList.tsx
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExpenseDTO } from '../types/ExpenseDTO';

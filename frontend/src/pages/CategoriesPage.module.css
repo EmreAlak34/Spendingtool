@@ -1,4 +1,5 @@
 
+
 .categoryButton {
     background-color: #83c5be;
     color: white;
@@ -14,7 +15,7 @@
 }
 
 .categoryButton:hover {
-    background-color: #64a8a1;
+    background-color: #64a8a1; /* Darker Teal */
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
@@ -29,4 +30,29 @@
     padding: 10px;
     font-size: 16px;
     border-radius: 8px;
+}
+
+
+.addExpenseButton {
+    background-color: #e27d60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.addExpenseButton:hover {
+    background-color: #c86948;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.addExpenseButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

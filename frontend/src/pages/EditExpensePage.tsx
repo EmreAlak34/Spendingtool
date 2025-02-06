@@ -1,5 +1,6 @@
+// src/pages/EditExpensePage.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchExpenseById, updateExpense } from '../api/expenseApi';
 import ExpenseForm from '../components/ExpenseForm';
 import { ExpenseDTO } from '../types/ExpenseDTO';
@@ -7,27 +8,39 @@ import { ExpenseDTO } from '../types/ExpenseDTO';
 const EditExpensePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const [expense, setExpense] = useState<ExpenseDTO | null>(null);
 
+    // Extract the category from the query parameters
+    const queryParams = new URLSearchParams(location.search);
+    const category = queryParams.get('category');
+
     useEffect(() => {
-        const getExpense = async () => {
-            const data = await fetchExpenseById(id!);
-            setExpense(data);
-        };
-        getExpense();
+        if (id) {
+            fetchExpenseById(id).then((data) => setExpense(data));
+        }
     }, [id]);
 
-    const handleSubmit = async (updatedExpenseDTO: ExpenseDTO) => {
-        await updateExpense(id!, updatedExpenseDTO);
-        navigate('/');
+    const handleSubmit = async (updatedExpense: ExpenseDTO) => {
+        if (id) {
+            await updateExpense(id, updatedExpense);
+            // Redirect back to the category page after editing
+            if (category) {
+                navigate(`/categories?selectedCategory=${category}`);
+            } else {
+                navigate('/categories'); // Fallback if no category is provided
+            }
+        }
     };
 
-    if (!expense) return <div>Loading...</div>;
+    if (!expense) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
             <h1>Edit Expense</h1>
-            <ExpenseForm initialData={expense} onSubmit={handleSubmit} />
+            <ExpenseForm onSubmit={handleSubmit} initialData={expense} />
         </div>
     );
 };

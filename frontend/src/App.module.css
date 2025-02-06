@@ -19,20 +19,20 @@
 
 .navLink {
     color: #007bff;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1.5rem; /*  Even Larger font size */
+    font-weight: 600;   /* Bolder font weight */
     text-decoration: none;
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease; /* Add transform transition */
 
 }
 
 .navLink:hover {
     color: #0056b3;
-    transform: scale(1.05);
+    transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 .contentWrapper {
-    padding-top: 75px;
+    padding-top: 75px; /* Adjust - needs to match navbar height + a little extra*/
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;

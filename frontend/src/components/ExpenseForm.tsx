@@ -1,85 +1,95 @@
-
-import React, { useState, useEffect } from 'react';
+// src/components/ExpenseForm.tsx
+import React, { useState } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseForm.module.css';
 import { categories } from '../constants';
 
 interface ExpenseFormProps {
-    onSubmit: (expense: ExpenseDTO) => Promise<void>;
     initialData?: ExpenseDTO;
-    showCategoryField?: boolean;
+    onSubmit: (expenseDTO: ExpenseDTO) => void;
 }
 
-const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCategoryField = true }) => {
-    const [description, setDescription] = useState(initialData?.description || '');
-    const [amount, setAmount] = useState(initialData?.amount.toString() || '');
-    const [category, setCategory] = useState(initialData?.category || '');
+const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
+    const [formData, setFormData] = useState<ExpenseDTO>(
+        initialData || { description: '', amount: 0, category: '' }
+    );
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
 
-    useEffect(() => {
-        if (initialData) {
-            setDescription(initialData.description);
-            setAmount(initialData.amount.toString());
-            setCategory(initialData.category);
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        if (name === 'category' && value === 'Other') {
+            setIsCustomCategory(true);
+            setFormData({ ...formData, category: '' });
+        } else if (name === 'category') {
+            setIsCustomCategory(false);
         }
-    }, [initialData]);
+    };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        const expenseDTO: ExpenseDTO = {
-            description,
-            amount: parseFloat(amount),
-            category: showCategoryField ? category : initialData?.category || '',
-        };
-
-        await onSubmit(expenseDTO);
+        onSubmit(formData);
     };
 
     return (
-        <form onSubmit={handleSubmit} className={styles.expenseForm}>
+        <form className={styles.expenseForm} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
-                <label>
-                    Description:
+                <label>Description</label>
+                <input
+                    type="text"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <label>Amount (€)</label>
+                <input
+                    type="number"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleChange}
+                    required
+                    step="0.01"
+                />
+            </div>
+            <div className={styles.formGroup}>
+                <label>Category</label>
+                {isCustomCategory ? (
                     <input
                         type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        placeholder="Enter category"
                         required
-                        className={styles.input}
                     />
-                </label>
-            </div>
-            <div className={styles.formGroup}>
-                <label>
-                    Amount:
-                    <input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                ) : (
+                    <select
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
                         required
-                        className={styles.input}
-                    />
-                </label>
+                    >
+                        <option value="" disabled>
+                            Select a category
+                        </option>
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                        <option value="Other">Other</option>
+                    </select>
+                )}
             </div>
-            {showCategoryField && (
-                <div className={styles.formGroup}>
-                    <label>
-                        Category:
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            required
-                            className={styles.input}
-                        >
-                            <option value="" disabled>Select a category</option> {/* Placeholder option */}
-                            {categories.map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
-                    </label>
-                </div>
-            )}
-            <button type="submit" className={styles.saveButton}>Save Expense</button>
+            <button type="submit" className={styles.saveButton}>
+                Save
+            </button>
         </form>
     );
 };

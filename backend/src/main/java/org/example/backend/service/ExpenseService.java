@@ -57,6 +57,7 @@ public class ExpenseService {
         return convertToDTO(savedExpense);
     }
 
+
     private ExpenseDTO convertToDTO(Expense expense) {
         return ExpenseDTO.builder()
                 .id(expense.getId())
@@ -66,4 +67,14 @@ public class ExpenseService {
                 .date(expense.getDate())
                 .build();
     }
+
+
+
+
+
+
+
+
+
+
 }

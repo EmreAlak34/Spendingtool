@@ -1,11 +1,6 @@
+/* src/components/ExpenseList.module.css */
 .expenseList {
-    max-width: 800px;
-    width: 100%;
-    margin: 20px;
     padding: 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .header {
@@ -16,76 +11,53 @@
 }
 
 .header h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
+    margin: 0;
+}
+
+.returnButton, .addButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.returnButton {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
 }
 
 .addButton {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: 500;
 }
 
 .expenseItem {
-    background-color: white;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.3s ease;
-}
-
-.expenseItem:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
 }
 
 .expenseItem span {
-    font-size: 16px;
-    font-weight: 500;
-    color: #555;
+    flex-grow: 1;
 }
 
-.expenseItem button {
+.editButton, .deleteButton {
+    padding: 5px 10px;
     margin-left: 10px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
     font-size: 14px;
-    font-weight: 500;
-}
-
-.viewButton {
-    background-color: #17a2b8;
-    color: white;
+    cursor: pointer;
 }
 
 .editButton {
-    background-color: #ffc107;
-    color: black;
+    background-color: #28a745;
+    color: white;
+    border: none;
 }
 
 .deleteButton {
     background-color: #dc3545;
     color: white;
-}
-
-@media (max-width: 768px) {
-    .expenseItem {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .expenseItem button {
-        margin: 5px 0;
-        width: 100%;
-    }
+    border: none;
 }

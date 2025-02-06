@@ -1,6 +1,8 @@
+// src/components/ExpenseForm.tsx
 import React, { useState } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import styles from './ExpenseForm.module.css';
+import { categories } from '../constants';
 
 interface ExpenseFormProps {
     initialData?: ExpenseDTO;
@@ -13,24 +15,11 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
     );
     const [isCustomCategory, setIsCustomCategory] = useState(false);
 
-    const categories = [
-        'Groceries',
-        'Hobbies',
-        'Travelling',
-        'Transportation',
-        'School',
-        'College',
-        'Car',
-        'Friends',
-
-    ];
-
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-
 
         if (name === 'category' && value === 'Other') {
             setIsCustomCategory(true);
@@ -58,13 +47,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ initialData, onSubmit }) => {
                 />
             </div>
             <div className={styles.formGroup}>
-                <label>Amount</label>
+                <label>Amount (€)</label>
                 <input
                     type="number"
                     name="amount"
                     value={formData.amount}
                     onChange={handleChange}
                     required
+                    step="0.01"
                 />
             </div>
             <div className={styles.formGroup}>

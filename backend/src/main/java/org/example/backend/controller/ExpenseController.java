@@ -29,8 +29,8 @@ public class ExpenseController {
 
 
     @PostMapping
-    public ExpenseDTO saveExpense(@RequestBody ExpenseDTO expenseDTO) {
-        return expenseService.saveExpense(expenseDTO);
+    public ExpenseDTO createExpense(@RequestBody ExpenseDTO expenseDTO) {
+        return expenseService.createExpense(expenseDTO);
     }
 
 

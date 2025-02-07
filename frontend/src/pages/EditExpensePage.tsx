@@ -24,7 +24,7 @@ const EditExpensePage: React.FC = () => {
     const handleSubmit = async (updatedExpense: ExpenseDTO) => {
         if (id) {
             await updateExpense(id, updatedExpense);
-            // Redirect back to the category page after editing
+
             if (category) {
                 navigate(`/categories?selectedCategory=${category}`);
             } else {

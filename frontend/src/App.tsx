@@ -10,7 +10,7 @@ import styles from './App.module.css';
 const App: React.FC = () => {
     return (
         <Router>
-            <div className={styles.appWrapper}> {/* NEW: Wrap everything except the Router */}
+            <div className={styles.appWrapper}>
                 <AppNavigation />
                 <div className={styles.contentWrapper}>
                     <Routes>

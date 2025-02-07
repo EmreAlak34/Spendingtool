@@ -8,7 +8,7 @@ const HomePage: React.FC = () => {
 
     return (
         <div className={styles.homePage}>
-            {/* Remove the <h1>Home</h1> */}
+
             <button onClick={() => navigate('/add-expense')} >
                 Add Expense
             </button>

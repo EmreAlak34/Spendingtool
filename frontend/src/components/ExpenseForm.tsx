@@ -69,9 +69,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCa
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             required
-                            className={styles.input} // Keep the same styling
+                            className={styles.input}
                         >
-                            <option value="" disabled>Select a category</option> {/* Placeholder option */}
+                            <option value="" disabled>Select a category</option>
                             {categories.map(cat => (
                                 <option key={cat} value={cat}>{cat}</option>
                             ))}

@@ -1,4 +1,4 @@
-package org.example.backend.CategoryController;
+package org.example.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.dto.CategoryDTO;

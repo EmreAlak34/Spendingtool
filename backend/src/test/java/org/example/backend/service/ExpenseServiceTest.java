@@ -1,10 +1,9 @@
-package org.example.backend.ExpenseService;
+package org.example.backend.service;
 
 import org.example.backend.dto.ExpenseDTO;
 import org.example.backend.exception.ExpenseNotFoundException;
 import org.example.backend.model.Expense;
 import org.example.backend.repository.ExpenseRepository;
-import org.example.backend.service.ExpenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

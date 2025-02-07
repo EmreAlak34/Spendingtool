@@ -1,4 +1,4 @@
-package org.example.backend.ExpenseController;
+package org.example.backend.controller;
 
 import org.example.backend.dto.ExpenseDTO;
 import org.example.backend.repository.ExpenseRepository;

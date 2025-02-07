@@ -6,6 +6,7 @@ import { CategoryDTO } from '../types/CategoryDTO';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './CategoriesPage.module.css';
 import axios from 'axios';
+import { categories as initialCategories } from '../constants';
 
 const CategoriesPage: React.FC = () => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
@@ -17,9 +18,28 @@ const CategoriesPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+
     useEffect(() => {
-        fetchCategories().then(data => setCategories(data));
+        fetchCategories()
+            .then(fetchedCategories => {
+
+                const fetchedCategoryNames = new Set(fetchedCategories.map(cat => cat.name));
+
+
+                const allCategories = [
+                    ...fetchedCategories,
+                    ...initialCategories
+                        .filter(initialCategory => !fetchedCategoryNames.has(initialCategory))
+                        .map(initialCategory => ({ id: initialCategory, name: initialCategory })),
+                ];
+                setCategories(allCategories);
+            })
+            .catch(error => {
+                console.error("Error fetching categories:", error);
+                alert("Failed to load categories. Please check your network connection and try again.");
+            });
     }, []);
+
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -48,12 +68,12 @@ const CategoriesPage: React.FC = () => {
                 setCategories([...categories, newCategory]);
                 setNewCategoryName('');
                 navigate(`/categories?selectedCategory=${newCategory.name}`);
-            } catch (error: unknown) { // Use unknown
+            } catch (error: unknown) {
                 if (axios.isAxiosError(error)) {
                     alert(error.response?.data);
                     console.error("Axios error:", error.response?.data);
                 } else if (error instanceof Error) {
-                    alert(error.message); // Fallback to generic Error
+                    alert(error.message);
                     console.error("Error adding category:", error.message);
                 } else {
                     alert("An unexpected error occurred.");
@@ -95,7 +115,7 @@ const CategoriesPage: React.FC = () => {
                 setEditedCategoryName('');
 
 
-                if(selectedCategory === oldCategoryName){
+                if (selectedCategory === oldCategoryName) {
                     navigate(`/categories?selectedCategory=${updatedCategory.name}`);
 
                 }
@@ -121,7 +141,7 @@ const CategoriesPage: React.FC = () => {
     const handleDeleteCategory = async (categoryId: string) => {
         try {
             await deleteCategory(categoryId);
-            const updatedCategories = categories.filter(cat => cat.id !== categoryId);
+            const updatedCategories = categories.filter(cat => cat.id !== categoryId)
             setCategories(updatedCategories);
             if (selectedCategory === categories.find(cat => cat.id === categoryId)?.name) {
                 setSelectedCategory(null);

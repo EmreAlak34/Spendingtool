@@ -1,20 +1,18 @@
 package org.example.backend.model;
 
-import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
-
-@Document(collection = "expenses")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Expense {
+@Document(collection = "categories")
+public class Category {
+
     @Id
     private String id;
-    private String description;
-    private double amount;
-    private String category;
-    private LocalDate date;
+    private String name;
 }

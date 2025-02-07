@@ -33,13 +33,13 @@ const EditExpensePage: React.FC = () => {
                 const categoriesData = await fetchCategories();
                 setCategories(categoriesData);
 
-            } catch (error: unknown) {
-                if (axios.isAxiosError(error)) {
-                    setError(error.response?.data || "An error occurred fetching data.");
+            } catch (err: unknown) {
+                if (axios.isAxiosError(err)) {
+                    setError(err.response?.data || "An error occurred fetching data.");
                 } else {
                     setError("An unexpected error occurred.");
                 }
-                console.error(error);
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -49,9 +49,11 @@ const EditExpensePage: React.FC = () => {
     }, [id]);
 
     const handleSubmit = async (updatedExpense: ExpenseDTO) => {
-        if (id) {
+        if (id && expense) { // Make sure expense exists
             try{
-                await updateExpense(id, updatedExpense);
+                // Keep date, and all other properties.
+                const finalExpense : ExpenseDTO = {...expense, ...updatedExpense}
+                await updateExpense(id, finalExpense);
                 if(category){
                     navigate(`/categories?selectedCategory=${category}`);
 

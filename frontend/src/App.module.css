@@ -1,4 +1,4 @@
-
+/* src/App.module.css */
 .appWrapper {
     min-height: 100vh;
     display:flex;
@@ -14,6 +14,9 @@
     width: 100%;
     padding: 15px 20px;
     z-index: 1000;
+    display: flex; /* Add this */
+    align-items: center; /* Add this */
+    justify-content: space-between;
 }
 
 .navLink {

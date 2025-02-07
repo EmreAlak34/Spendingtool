@@ -6,7 +6,8 @@ import { CategoryDTO } from '../types/CategoryDTO';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './CategoriesPage.module.css';
 import axios from 'axios';
-import { categories as initialCategories } from '../constants';
+import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import { categories as initialCategories } from '../constants'; // Import!
 
 const CategoriesPage: React.FC = () => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
@@ -21,20 +22,27 @@ const CategoriesPage: React.FC = () => {
     useEffect(() => {
         fetchCategories()
             .then(fetchedCategories => {
+
                 const fetchedCategoryNames = new Set(fetchedCategories.map(cat => cat.name));
+
+
                 const allCategories = [
                     ...fetchedCategories,
                     ...initialCategories
                         .filter(initialCategory => !fetchedCategoryNames.has(initialCategory))
                         .map(initialCategory => ({ id: initialCategory, name: initialCategory })),
                 ];
+
+
+                allCategories.sort((a, b) => a.name.localeCompare(b.name));
+
                 setCategories(allCategories);
             })
             .catch(error => {
                 console.error("Error fetching categories:", error);
                 alert("Failed to load categories. Please check your network connection and try again.");
             });
-    }, []);
+    }, []); // Runs ONLY on mount
 
 
     useEffect(() => {
@@ -61,7 +69,10 @@ const CategoriesPage: React.FC = () => {
         if (newCategoryName.trim() !== '') {
             try {
                 const newCategory: CategoryDTO = await createCategory(newCategoryName);
-                setCategories([...categories, newCategory]);
+                // Add new category at correct sorted position
+                const newCategories = [...categories, newCategory];
+                newCategories.sort((a,b) => a.name.localeCompare(b.name));
+                setCategories(newCategories);
                 setNewCategoryName('');
                 navigate(`/categories?selectedCategory=${newCategory.name}`);
             } catch (error: unknown) {
@@ -81,7 +92,7 @@ const CategoriesPage: React.FC = () => {
 
     const handleStartEdit = (categoryName: string) => {
         const category = categories.find(cat => cat.name === categoryName)
-        if (category) {
+        if(category) {
             setEditingCategory(category.id);
             setEditedCategoryName(category.name);
         }
@@ -136,17 +147,11 @@ const CategoriesPage: React.FC = () => {
     };
 
     const handleDeleteCategory = async (categoryId: string) => {
-        try {
-            // Check if the category ID is one of the initial category *names*.
-            if (initialCategories.includes(categoryId)) {
-                alert("Cannot delete default categories.");
-                return;
-            }
-
+        try{
             await deleteCategory(categoryId);
             const updatedCategories = categories.filter(cat => cat.id !== categoryId);
             setCategories(updatedCategories);
-            if (selectedCategory === categories.find(cat => cat.id === categoryId)?.name) {
+            if(selectedCategory === categories.find(cat => cat.id === categoryId)?.name){
                 setSelectedCategory(null);
                 navigate(`/categories`);
             }
@@ -163,14 +168,12 @@ const CategoriesPage: React.FC = () => {
                 console.error("Error deleting category:", error);
             }
         }
-    };
-
-
+    }
     return (
         <div>
             <h1>Categories</h1>
 
-            <div style={{ marginBottom: '20px' }}>
+            <div className={styles.addCategoryContainer}>
                 <input
                     type="text"
                     value={newCategoryName}
@@ -178,21 +181,22 @@ const CategoriesPage: React.FC = () => {
                     placeholder="New category name"
                     className={styles.addCategoryInput}
                 />
-                <button onClick={handleAddCategory}>Add Category</button>
+                <button onClick={handleAddCategory} className={styles.addCategoryButton}>Add Category</button>
             </div>
 
-            <div style={{ marginBottom: '20px' }}>
+            <div className={styles.categoryList}>
                 {categories.map(category => (
-                    <div key={category.id} style={{ display: 'inline-block', marginRight: '10px', marginBottom: '10px' }}>
+                    <div key={category.id} className={styles.categoryItem}>
                         {editingCategory === category.id ? (
                             <>
                                 <input
                                     type="text"
                                     value={editedCategoryName}
                                     onChange={(e) => setEditedCategoryName(e.target.value)}
+                                    className={styles.editCategoryInput}
                                 />
-                                <button onClick={() => handleSaveEdit(category.name)}>Save</button>
-                                <button onClick={handleCancelEdit}>Cancel</button>
+                                <button onClick={() => handleSaveEdit(category.name)} className={styles.saveEditButton}>Save</button>
+                                <button onClick={handleCancelEdit} className={styles.cancelEditButton}>Cancel</button>
                             </>
                         ) : (
                             <>
@@ -205,8 +209,20 @@ const CategoriesPage: React.FC = () => {
                                 >
                                     {category.name}
                                 </button>
-                                <button onClick={() => handleStartEdit(category.name)}>Rename</button>
-                                <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
+                                <button
+                                    onClick={() => {handleStartEdit(category.name);}}
+                                    className={styles.iconButton}
+                                    aria-label="Rename Category"
+                                >
+                                    <FaEdit />
+                                </button>
+                                <button
+                                    onClick={() => {handleDeleteCategory(category.id);}}
+                                    className={styles.iconButton}
+                                    aria-label="Delete Category"
+                                >
+                                    <FaTrashAlt />
+                                </button>
                             </>
                         )}
                     </div>

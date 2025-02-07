@@ -30,12 +30,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCa
             description,
             amount: parseFloat(amount),
             category: showCategoryField ? category : initialData?.category || '',
+            date: new Date().toISOString().split('T')[0],
+
         };
 
         await onSubmit(expenseDTO);
     };
 
-    // Sort categories alphabetically by name *before* rendering
     const sortedCategories = [...categories].sort((a, b) => a.name.localeCompare(b.name));
 
     return (
@@ -75,7 +76,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCa
                             className={styles.input}
                         >
                             <option value="" disabled>Select a category</option>
-                            {/* Use sortedCategories here */}
                             {sortedCategories.map(cat => (
                                 <option key={cat.id} value={cat.name}>{cat.name}</option>
                             ))}

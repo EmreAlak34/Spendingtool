@@ -38,7 +38,12 @@ const AddExpensePage: React.FC = () => {
         }
         await createExpense(expenseDTO);
 
-        navigate('/');
+        // Redirect based on where the user came from:
+        if (category) {
+            navigate(`/categories?selectedCategory=${category}`); // Redirect back to category
+        } else {
+            navigate('/'); // Redirect to the homepage if no category
+        }
     };
 
     return (

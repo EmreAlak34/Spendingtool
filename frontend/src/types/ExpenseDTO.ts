@@ -4,5 +4,6 @@ export interface ExpenseDTO {
     description: string;
     amount: number;
     category: string;
+    date: string;
 
 }

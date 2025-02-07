@@ -20,7 +20,13 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
                 {expenses.map((expense) => (
                     <li key={expense.id} className={styles.expenseItem}>
                         <span>
-                            {expense.description} - {expense.amount.toFixed(2)} €
+                            {expense.description} - {expense.amount.toFixed(2)} € - {
+                            new Date(expense.date).toLocaleDateString('de-DE', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                            })
+                        }
                         </span>
                         <div>
                             <button

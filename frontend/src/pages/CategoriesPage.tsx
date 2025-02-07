@@ -6,7 +6,7 @@ import { CategoryDTO } from '../types/CategoryDTO';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './CategoriesPage.module.css';
 import axios from 'axios';
-import { categories as initialCategories } from '../constants'; // Import
+import { categories as initialCategories } from '../constants';
 
 const CategoriesPage: React.FC = () => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
@@ -140,7 +140,7 @@ const CategoriesPage: React.FC = () => {
             // Check if the category ID is one of the initial category *names*.
             if (initialCategories.includes(categoryId)) {
                 alert("Cannot delete default categories.");
-                return; // Prevent deletion
+                return;
             }
 
             await deleteCategory(categoryId);

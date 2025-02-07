@@ -4,7 +4,7 @@ import ExpenseForm from '../components/ExpenseForm';
 import { createExpense, fetchCategories } from '../api/expenseApi';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import { CategoryDTO } from '../types/CategoryDTO';
-import { categories as initialCategories } from '../constants'; // Import
+import { categories as initialCategories } from '../constants';
 
 const AddExpensePage: React.FC = () => {
     const navigate = useNavigate();

@@ -1,5 +1,4 @@
-
-package org.example.backend.controller;
+package org.example.backend.ExpenseController;
 
 import org.example.backend.dto.ExpenseDTO;
 import org.example.backend.repository.ExpenseRepository;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,7 +37,7 @@ class ExpenseControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         expenseRepository.deleteAll();
-        testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food");
+        testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food", LocalDate.now()); // Include date
     }
 
     @AfterEach
@@ -54,7 +54,8 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.description").value("Groceries"))
                 .andExpect(jsonPath("$.amount").value(50.0))
-                .andExpect(jsonPath("$.category").value("Food"));
+                .andExpect(jsonPath("$.category").value("Food"))
+                .andExpect(jsonPath("$.date").exists()); // Verify date is present
     }
 
     @Test
@@ -69,7 +70,8 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].description").value("Groceries"))
                 .andExpect(jsonPath("$[0].amount").value(50.0))
-                .andExpect(jsonPath("$[0].category").value("Food"));
+                .andExpect(jsonPath("$[0].category").value("Food"))
+                .andExpect(jsonPath("$[0].date").exists()); // Verify date is present
     }
 
     @Test
@@ -86,7 +88,8 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.id").value(savedExpense.getId()))
                 .andExpect(jsonPath("$.description").value("Groceries"))
                 .andExpect(jsonPath("$.amount").value(50.0))
-                .andExpect(jsonPath("$.category").value("Food"));
+                .andExpect(jsonPath("$.category").value("Food"))
+                .andExpect(jsonPath("$.date").exists()); // Verify date is present
     }
 
     @Test
@@ -104,7 +107,8 @@ class ExpenseControllerIntegrationTest {
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
-        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Food");
+
+        ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Food", savedExpense.getDate());
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,12 +116,14 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description").value("Updated Description"))
                 .andExpect(jsonPath("$.amount").value(75.0))
-                .andExpect(jsonPath("$.category").value("Food"));
+                .andExpect(jsonPath("$.category").value("Food"))
+                .andExpect(jsonPath("$.date").value(savedExpense.getDate().toString()));
     }
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
-        ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other");
+
+        ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
 
         mockMvc.perform(put("/api/expenses/nonexistent-id")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -146,6 +152,4 @@ class ExpenseControllerIntegrationTest {
         mockMvc.perform(delete("/api/expenses/nonexistent-id"))
                 .andExpect(status().isNotFound());
     }
-
-
 }

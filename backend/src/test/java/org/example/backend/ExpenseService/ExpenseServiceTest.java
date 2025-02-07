@@ -1,9 +1,10 @@
-package org.example.backend.service;
+package org.example.backend.ExpenseService;
 
 import org.example.backend.dto.ExpenseDTO;
 import org.example.backend.exception.ExpenseNotFoundException;
 import org.example.backend.model.Expense;
 import org.example.backend.repository.ExpenseRepository;
+import org.example.backend.service.ExpenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +39,15 @@ class ExpenseServiceTest {
         expense.setDescription("Groceries");
         expense.setAmount(50.0);
         expense.setCategory("Food");
+        expense.setDate(LocalDate.now());
 
-        expenseDTO = new ExpenseDTO("1", "Groceries", 50.0, "Food");
+        expenseDTO = ExpenseDTO.builder()
+                .id("1")
+                .description("Groceries")
+                .amount(50.0)
+                .category("Food")
+                .date(LocalDate.now())
+                .build();
     }
 
     @Test
@@ -53,11 +62,12 @@ class ExpenseServiceTest {
     }
 
     @Test
-    void testSaveExpense() {
+    void testCreateExpense() {
         when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
-        ExpenseDTO result = expenseService.saveExpense(expenseDTO);
+        ExpenseDTO result = expenseService.createExpense(expenseDTO);
         assertNotNull(result);
         assertEquals("Groceries", result.getDescription());
+        assertNotNull(result.getDate());
     }
 
     @Test
@@ -77,17 +87,21 @@ class ExpenseServiceTest {
 
     @Test
     void testDeleteExpenseSuccess() {
-        when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
-        doNothing().when(expenseRepository).delete(expense);
-
+        when(expenseRepository.existsById("1")).thenReturn(true);
         assertDoesNotThrow(() -> expenseService.deleteExpense("1"));
-        verify(expenseRepository, times(1)).delete(expense);
+        verify(expenseRepository, times(1)).deleteById("1");
     }
 
     @Test
     void testDeleteExpenseNotFound() {
-        when(expenseRepository.findById("2")).thenReturn(Optional.empty());
+        // Mock existsById to return false, simulating a non-existent expense
+        when(expenseRepository.existsById("2")).thenReturn(false); // THIS IS KEY
+
+        // Assert that ExpenseNotFoundException is thrown
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.deleteExpense("2"));
+
+        // Verify that deleteById was *not* called
+        verify(expenseRepository, never()).deleteById("2"); // ALSO IMPORTANT
     }
 
     @Test
@@ -97,8 +111,15 @@ class ExpenseServiceTest {
         updatedExpense.setDescription("Updated");
         updatedExpense.setAmount(100.0);
         updatedExpense.setCategory("Updated Category");
+        updatedExpense.setDate(LocalDate.now());
 
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("1", "Updated", 100.0, "Updated Category");
+        ExpenseDTO updatedExpenseDTO = ExpenseDTO.builder()
+                .id("1")
+                .description("Updated")
+                .amount(100.0)
+                .category("Updated Category")
+                .date(LocalDate.now())
+                .build();
 
         when(expenseRepository.findById("1")).thenReturn(Optional.of(expense));
         when(expenseRepository.save(any(Expense.class))).thenReturn(updatedExpense);
@@ -111,9 +132,14 @@ class ExpenseServiceTest {
 
     @Test
     void testUpdateExpenseNotFound() {
-        ExpenseDTO updatedExpenseDTO = new ExpenseDTO("2", "Updated", 100.0, "Updated Category");
+        ExpenseDTO updatedExpenseDTO = ExpenseDTO.builder()
+                .id("2")
+                .description("Updated")
+                .amount(100.0)
+                .category("Updated Category")
+                .date(LocalDate.now())
+                .build();
         when(expenseRepository.findById("2")).thenReturn(Optional.empty());
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.updateExpense("2", updatedExpenseDTO));
     }
 }
-

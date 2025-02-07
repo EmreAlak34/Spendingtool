@@ -1,5 +1,5 @@
-
 export const categories = [
+
     'Groceries',
     'Hobbies',
     'Travelling',
@@ -9,4 +9,5 @@ export const categories = [
     'Car',
     'Friends',
     'Other',
+
 ];

@@ -1,4 +1,4 @@
-// src/components/ExpenseList.tsx
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExpenseDTO } from '../types/ExpenseDTO';
@@ -7,6 +7,8 @@ import styles from './ExpenseList.module.css';
 interface ExpenseListProps {
     expenses: ExpenseDTO[];
     onDelete: (id: string) => Promise<void>;
+
+
 }
 
 const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
@@ -16,18 +18,6 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
         <div className={styles.expenseList}>
             <div className={styles.header}>
                 <h1>Expenses</h1>
-                <div>
-                    <button className={styles.returnButton} onClick={() => navigate('/')}>
-                        Return
-                    </button>
-                    <button
-                        className={styles.addButton}
-                        onClick={() => navigate('/add-expense')}
-                        style={{ marginLeft: '10px' }}
-                    >
-                        Add Expense
-                    </button>
-                </div>
             </div>
             <ul>
                 {expenses.map((expense) => (

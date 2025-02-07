@@ -13,6 +13,7 @@ const ExpenseDetail: React.FC = () => {
             const data = await fetchExpenseById(id!);
             setExpense(data);
         };
+
         getExpense();
     }, [id]);
 

@@ -1,4 +1,4 @@
-package org.example.backend.controller;
+package org.example.backend.ExpenseController;
 
 import org.example.backend.dto.ExpenseDTO;
 import org.example.backend.repository.ExpenseRepository;
@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate; // Import LocalDate
+import java.time.LocalDate;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -107,7 +107,7 @@ class ExpenseControllerIntegrationTest {
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
-        // Create an updated DTO *including the date*
+
         ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Food", savedExpense.getDate());
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
@@ -117,12 +117,12 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.description").value("Updated Description"))
                 .andExpect(jsonPath("$.amount").value(75.0))
                 .andExpect(jsonPath("$.category").value("Food"))
-                .andExpect(jsonPath("$.date").value(savedExpense.getDate().toString())); // Verify date is present and unchanged
+                .andExpect(jsonPath("$.date").value(savedExpense.getDate().toString()));
     }
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
-        // Create an updated DTO with a non-existent ID and the current date
+
         ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
 
         mockMvc.perform(put("/api/expenses/nonexistent-id")

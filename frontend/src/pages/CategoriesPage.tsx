@@ -6,7 +6,7 @@ import { CategoryDTO } from '../types/CategoryDTO';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './CategoriesPage.module.css';
 import axios from 'axios';
-import { categories as initialCategories } from '../constants';
+import { categories as initialCategories } from '../constants'; // Import
 
 const CategoriesPage: React.FC = () => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
@@ -18,14 +18,10 @@ const CategoriesPage: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-
     useEffect(() => {
         fetchCategories()
             .then(fetchedCategories => {
-
                 const fetchedCategoryNames = new Set(fetchedCategories.map(cat => cat.name));
-
-
                 const allCategories = [
                     ...fetchedCategories,
                     ...initialCategories
@@ -64,7 +60,7 @@ const CategoriesPage: React.FC = () => {
     const handleAddCategory = async () => {
         if (newCategoryName.trim() !== '') {
             try {
-                const newCategory = await createCategory(newCategoryName);
+                const newCategory: CategoryDTO = await createCategory(newCategoryName);
                 setCategories([...categories, newCategory]);
                 setNewCategoryName('');
                 navigate(`/categories?selectedCategory=${newCategory.name}`);
@@ -115,7 +111,7 @@ const CategoriesPage: React.FC = () => {
                 setEditedCategoryName('');
 
 
-                if (selectedCategory === oldCategoryName) {
+                if(selectedCategory === oldCategoryName){
                     navigate(`/categories?selectedCategory=${updatedCategory.name}`);
 
                 }
@@ -138,10 +134,17 @@ const CategoriesPage: React.FC = () => {
         setEditingCategory(null);
         setEditedCategoryName('');
     };
+
     const handleDeleteCategory = async (categoryId: string) => {
         try {
+            // Check if the category ID is one of the initial category *names*.
+            if (initialCategories.includes(categoryId)) {
+                alert("Cannot delete default categories.");
+                return; // Prevent deletion
+            }
+
             await deleteCategory(categoryId);
-            const updatedCategories = categories.filter(cat => cat.id !== categoryId)
+            const updatedCategories = categories.filter(cat => cat.id !== categoryId);
             setCategories(updatedCategories);
             if (selectedCategory === categories.find(cat => cat.id === categoryId)?.name) {
                 setSelectedCategory(null);
@@ -160,7 +163,8 @@ const CategoriesPage: React.FC = () => {
                 console.error("Error deleting category:", error);
             }
         }
-    }
+    };
+
 
     return (
         <div>

@@ -4,13 +4,13 @@ package org.example.backend.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.Builder; // Add this
+import lombok.Builder;
 import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder // Add this
+@Builder
 public class ExpenseDTO {
     private String id;
     private String description;

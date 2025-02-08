@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 
-import java.time.LocalDate; 
+
 
 
 
@@ -111,11 +111,11 @@ class ExpenseControllerIntegrationTest {
 
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
-frontend-full
+
 
 
         
- master
+
         ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Food", savedExpense.getDate());
 
         mockMvc.perform(put("/api/expenses/" + savedExpense.getId())
@@ -128,16 +128,16 @@ frontend-full
 
                 .andExpect(jsonPath("$.date").value(savedExpense.getDate().toString()));
 
-                .andExpect(jsonPath("$.date").value(savedExpense.getDate().toString())); // Verify date is present and unchanged
+
 
     }
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
-frontend-full
+
 
         
- master
+
         ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
 
         mockMvc.perform(put("/api/expenses/nonexistent-id")

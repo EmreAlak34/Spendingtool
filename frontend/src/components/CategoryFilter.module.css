@@ -5,10 +5,6 @@
     border-radius: 8px;
     margin-bottom: 20px;
     background-color: white;
-
-    max-height: 250px;
-    overflow-y: auto;
-
 }
 
 .categoryFilter h4 {
@@ -17,10 +13,10 @@
 }
 
 .checkboxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 5px 10px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
 }
 .checkboxItem label{
     display: flex;

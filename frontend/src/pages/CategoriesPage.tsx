@@ -1,48 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { fetchExpenses, deleteExpense, fetchCategories, createCategory, updateCategory, deleteCategory } from '../api/expenseApi';
+import { fetchExpenses, deleteExpense, createCategory, updateCategory, deleteCategory } from '../api/expenseApi';
 import ExpenseList from '../components/ExpenseList';
 import { ExpenseDTO } from '../types/ExpenseDTO';
-import { CategoryDTO } from '../types/CategoryDTO';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './CategoriesPage.module.css';
 import axios from 'axios';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
-import { categories as initialCategories } from '../constants'; // Import!
+import { useCategoryContext } from '../context/CategoryContext';
 
 const CategoriesPage: React.FC = () => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [categories, setCategories] = useState<CategoryDTO[]>([]);
+    const { categories, setCategories } = useCategoryContext(); // Use context
     const [newCategoryName, setNewCategoryName] = useState('');
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [editedCategoryName, setEditedCategoryName] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
-
-    useEffect(() => {
-        fetchCategories()
-            .then(fetchedCategories => {
-
-                const fetchedCategoryNames = new Set(fetchedCategories.map(cat => cat.name));
-
-
-                const allCategories = [
-                    ...fetchedCategories,
-                    ...initialCategories
-                        .filter(initialCategory => !fetchedCategoryNames.has(initialCategory))
-                        .map(initialCategory => ({ id: initialCategory, name: initialCategory })),
-                ];
-
-
-                allCategories.sort((a, b) => a.name.localeCompare(b.name));
-
-                setCategories(allCategories);
-            })
-            .catch(error => {
-                console.error("Error fetching categories:", error);
-                alert("Failed to load categories. Please check your network connection and try again.");
-            });
-    }, []); // Runs ONLY on mount
+    const [sortBy, setSortBy] = useState<keyof ExpenseDTO>('date');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
 
     useEffect(() => {
@@ -68,11 +45,13 @@ const CategoriesPage: React.FC = () => {
     const handleAddCategory = async () => {
         if (newCategoryName.trim() !== '') {
             try {
-                const newCategory: CategoryDTO = await createCategory(newCategoryName);
-                // Add new category at correct sorted position
-                const newCategories = [...categories, newCategory];
-                newCategories.sort((a,b) => a.name.localeCompare(b.name));
-                setCategories(newCategories);
+                const newCategory = await createCategory(newCategoryName);
+
+                setCategories(prevCategories => {
+                    const updatedCategories = [...prevCategories, newCategory];
+                    updatedCategories.sort((a, b) => a.name.localeCompare(b.name));
+                    return updatedCategories;
+                });
                 setNewCategoryName('');
                 navigate(`/categories?selectedCategory=${newCategory.name}`);
             } catch (error: unknown) {
@@ -89,25 +68,28 @@ const CategoriesPage: React.FC = () => {
             }
         }
     };
-
     const handleStartEdit = (categoryName: string) => {
-        const category = categories.find(cat => cat.name === categoryName)
-        if(category) {
+        const category = categories.find(cat => cat.name === categoryName);
+        if (category) {
             setEditingCategory(category.id);
             setEditedCategoryName(category.name);
         }
-
     };
 
     const handleSaveEdit = async (oldCategoryName: string) => {
-        const category = categories.find(cat => cat.name === oldCategoryName)
-
+        const category = categories.find(cat => cat.name === oldCategoryName);
         if (category && editedCategoryName.trim() !== '') {
             try {
                 const updatedCategory = await updateCategory(category.id, editedCategoryName);
-                const updatedCategories = categories.map((cat) =>
-                    cat.id === category.id ? updatedCategory : cat
-                );
+
+                setCategories(prevCategories => {
+                    const updatedCategories = prevCategories.map(cat =>
+                        cat.id === category.id ? updatedCategory : cat
+                    );
+                    updatedCategories.sort((a, b) => a.name.localeCompare(b.name));
+                    return updatedCategories;
+                });
+
 
                 const updatedExpenses = expenses.map(expense => {
                     if (expense.category === oldCategoryName) {
@@ -116,15 +98,11 @@ const CategoriesPage: React.FC = () => {
                     return expense;
                 });
                 setExpenses(updatedExpenses);
-
-                setCategories(updatedCategories);
                 setEditingCategory(null);
                 setEditedCategoryName('');
 
-
-                if(selectedCategory === oldCategoryName){
+                if (selectedCategory === oldCategoryName) {
                     navigate(`/categories?selectedCategory=${updatedCategory.name}`);
-
                 }
             } catch (error: unknown) {
                 if (axios.isAxiosError(error)) {
@@ -147,11 +125,12 @@ const CategoriesPage: React.FC = () => {
     };
 
     const handleDeleteCategory = async (categoryId: string) => {
-        try{
+        try {
             await deleteCategory(categoryId);
-            const updatedCategories = categories.filter(cat => cat.id !== categoryId);
-            setCategories(updatedCategories);
-            if(selectedCategory === categories.find(cat => cat.id === categoryId)?.name){
+
+            setCategories(prevCategories => prevCategories.filter(cat => cat.id !== categoryId));
+
+            if (selectedCategory === categories.find(cat => cat.id === categoryId)?.name) {
                 setSelectedCategory(null);
                 navigate(`/categories`);
             }
@@ -168,7 +147,30 @@ const CategoriesPage: React.FC = () => {
                 console.error("Error deleting category:", error);
             }
         }
-    }
+    };
+
+    const sortedExpenses = [...expenses].sort((a, b) => {
+        if (!sortBy) return 0;
+
+        const aValue = a[sortBy];
+        const bValue = b[sortBy];
+
+        if (aValue === undefined || bValue === undefined) {
+            return 0;
+        }
+
+        let comparison = 0;
+        if (sortBy === 'amount') {
+            comparison = (aValue as number) - (bValue as number);
+        } else if (sortBy === 'date') {
+            comparison = new Date(aValue as string).getTime() - new Date(bValue as string).getTime();
+        }  else if (typeof aValue === 'string' && typeof bValue === 'string') {
+            comparison = aValue.localeCompare(bValue);
+        }
+        return sortDirection === 'asc' ? comparison : -comparison;
+    });
+
+
     return (
         <div>
             <h1>Categories</h1>
@@ -232,6 +234,23 @@ const CategoriesPage: React.FC = () => {
             {selectedCategory && (
                 <div>
                     <h2>{selectedCategory}</h2>
+                    <div>
+                        <label>
+                            Sort By:
+                            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as keyof ExpenseDTO)}>
+                                <option value="date">Date</option>
+                                <option value="amount">Amount</option>
+                                <option value="description">Alphabetically</option>
+                            </select>
+                        </label>
+                        <label>
+                            Direction:
+                            <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value as 'asc' | 'desc')}>
+                                <option value="asc">Ascending</option>
+                                <option value="desc">Descending</option>
+                            </select>
+                        </label>
+                    </div>
                     <button
                         onClick={() => navigate(`/add-expense?category=${selectedCategory}`)}
                         className={styles.addExpenseButton}
@@ -239,7 +258,7 @@ const CategoriesPage: React.FC = () => {
                         Add Expense
                     </button>
                     <ExpenseList
-                        expenses={expenses.filter(expense => expense.category === selectedCategory)}
+                        expenses={sortedExpenses.filter(expense => expense.category === selectedCategory)}
                         onDelete={handleDeleteExpense}
                     />
                 </div>

@@ -4,9 +4,9 @@ import HomePage from './pages/HomePage';
 import AddExpensePage from './pages/AddExpensePage';
 import EditExpensePage from './pages/EditExpensePage';
 import CategoriesPage from './pages/CategoriesPage';
-
+import DashboardPage from './pages/DashboardPage';
 import styles from './App.module.css';
-
+import { FaChartLine } from 'react-icons/fa';
 
 const App: React.FC = () => {
     return (
@@ -19,7 +19,7 @@ const App: React.FC = () => {
                         <Route path="/add-expense" element={<AddExpensePage />} />
                         <Route path="/edit-expense/:id" element={<EditExpensePage />} />
                         <Route path="/categories" element={<CategoriesPage />} />
-
+                        <Route path="/dashboard" element={<DashboardPage />} />
                     </Routes>
                 </div>
             </div>
@@ -31,7 +31,10 @@ const AppNavigation: React.FC = () => {
     return (
         <nav className={styles.navbar}>
             <Link to="/" className={styles.navLink}>Spending Harmony</Link>
-
+            <Link to="/dashboard" className={styles.navLink}>
+                <FaChartLine style={{ marginRight: '5px' }} />
+                Dashboard
+            </Link>
         </nav>
     );
 }

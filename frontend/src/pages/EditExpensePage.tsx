@@ -49,9 +49,9 @@ const EditExpensePage: React.FC = () => {
     }, [id]);
 
     const handleSubmit = async (updatedExpense: ExpenseDTO) => {
-        if (id && expense) { // Make sure expense exists
+        if (id && expense) {
             try{
-                // Keep date, and all other properties.
+
                 const finalExpense : ExpenseDTO = {...expense, ...updatedExpense}
                 await updateExpense(id, finalExpense);
                 if(category){

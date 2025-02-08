@@ -1,0 +1,53 @@
+/* src/pages/DashboardPage.module.css */
+
+.dashboardPage {
+    padding: 20px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.totalSpending {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.periodSelection button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.periodSelection button:hover {
+    background-color: #0056b3;
+}
+
+.periodSelection button.active {
+    background-color: #0056b3;
+    font-weight: bold;
+}
+
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.chartContainer {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: white;
+}
+.chartContainer h3{
+    text-align: center;
+}

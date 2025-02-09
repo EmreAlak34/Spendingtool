@@ -1,4 +1,4 @@
-/* src/App.module.css */
+
 .appWrapper {
     min-height: 100vh;
     display: flex;
@@ -47,16 +47,16 @@
     font-weight: 500;
 }
 
-/*  Content Wrapper Styles */
+
 .contentWrapper {
     flex-grow: 1;
     width: 100%;
-    /*  Increased padding-top to make space for header */
+
     margin-left: 250px;
     background-color: #f8f9fa;
-    padding: 80px 30px 30px 30px; /* Top padding, then other sides */
+    padding: 80px 30px 30px 30px;
     min-height: 100vh;
-    box-sizing: border-box; /* Include padding in width */
+    box-sizing: border-box;
 }
 
 
@@ -74,21 +74,21 @@
     transform: scale(1.05);
 }
 
-/* New styles for the app header */
+
 .appHeader {
-    background-color: #fff; /* White background */
-    color:  #007bff; /* Text color */
+    background-color: #fff;
+    color:  #007bff;
     padding: 15px 20px;
-    position: fixed;        /* Fixed at the top */
+    position: fixed;
     top: 0;
-    left: 250px;            /* Start after the sidebar */
-    width: calc(100% - 250px);/* Adjust width */
-    z-index: 999;          /* Above content, below sidebar */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    left: 250px;
+    width: calc(100% - 250px);
+    z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .appHeader h1 {
-    margin: 0; /* Remove default margin */
+    margin: 0;
     font-size: 1.75rem;
     font-weight: 600;
 }

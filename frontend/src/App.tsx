@@ -6,7 +6,7 @@ import EditExpensePage from './pages/EditExpensePage';
 import CategoriesPage from './pages/CategoriesPage';
 import DashboardPage from './pages/DashboardPage';
 import styles from './App.module.css';
-import {  FaChartLine, FaPlus, FaList, FaHome } from 'react-icons/fa'; // Import icons
+import {  FaChartLine, FaPlus, FaList, FaHome } from 'react-icons/fa';
 
 
 const App: React.FC = () => {

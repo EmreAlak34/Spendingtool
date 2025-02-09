@@ -244,7 +244,7 @@ const DashboardPage: React.FC = () => {
         <div className={styles.dashboardPage}>
             <div className={styles.header}>
                 <div className={styles.totalSpending}>
-                    Total: €{totalSpending.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    Total: {totalSpending.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
                 </div>
                 <div className={styles.periodSelection}>
                     <button

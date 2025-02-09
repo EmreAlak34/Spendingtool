@@ -173,7 +173,7 @@ const CategoriesPage: React.FC = () => {
 
     return (
         <div>
-            <h1>Categories</h1>
+
 
             <div className={styles.addCategoryContainer}>
                 <input

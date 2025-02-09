@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
+/* src/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
     margin: 0;
@@ -8,9 +8,9 @@
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    background: #f8f9fa;
-    color: #343a40;
+    font-family: 'Poppins', sans-serif;
+    background: #f2f2f2;
+    color: #333;
     min-height: 100vh;
 }
 
@@ -18,24 +18,30 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 0.5rem 1rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 button:hover {
-
     opacity: 0.9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 input, select {
     transition: all 0.3s ease;
     border: 1px solid #ced4da;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 0.5rem;
     font-size: 1rem;
     margin-bottom: 1rem;
     width: 100%;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 input:focus, select:focus {
@@ -47,4 +53,5 @@ input:focus, select:focus {
 h1, h2, h3 {
     margin-bottom: 1rem;
     font-weight: 600;
+    font-family: 'Poppins', sans-serif;
 }

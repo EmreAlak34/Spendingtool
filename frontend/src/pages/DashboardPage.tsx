@@ -15,13 +15,11 @@ import {
     RadarController,
     RadialLinearScale,
     Filler,
-
 } from 'chart.js';
 import { Line, Bar, Doughnut, Radar } from 'react-chartjs-2';
 import styles from './DashboardPage.module.css';
 import CategoryFilter from '../components/CategoryFilter';
 import { useCategoryContext } from '../context/CategoryContext';
-
 
 ChartJS.register(
     CategoryScale,
@@ -47,7 +45,7 @@ const DashboardPage: React.FC = () => {
     const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('month');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-    const { categories, fetchCategoriesData } = useCategoryContext();
+    const { categories } = useCategoryContext();
 
     useEffect(() => {
         fetchExpenses()
@@ -61,17 +59,6 @@ const DashboardPage: React.FC = () => {
                 console.error(err);
             });
     }, []);
-
-
-    useEffect(() => {
-        if(selectedCategories.length > 0){
-            const currentCategoryNames = categories.map(cat => cat.name);
-            const validSelectedCategories = selectedCategories.filter(catName => currentCategoryNames.includes(catName));
-            setSelectedCategories(validSelectedCategories);
-
-        }
-    }, [categories]);
-
 
     if (loading) {
         return <div>Loading...</div>;
@@ -111,7 +98,6 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-
     const filterExpensesByPeriod = (expenses: ExpenseDTO[], period: TimePeriod): ExpenseDTO[] => {
         const now = new Date();
         const startOfPeriod = getStartOfPeriod(now, period);
@@ -121,7 +107,6 @@ const DashboardPage: React.FC = () => {
             return expenseDate >= startOfPeriod;
         });
     };
-
 
     const filterExpenses = (expenses: ExpenseDTO[], period: TimePeriod, selectedCategories: string[]): ExpenseDTO[] => {
         let filtered = filterExpensesByPeriod(expenses, period);
@@ -135,7 +120,6 @@ const DashboardPage: React.FC = () => {
     const filteredExpenses = filterExpenses(expenses, selectedPeriod, selectedCategories);
     const totalSpending = filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
-
     const prepareCategoryData = (expensesToUse: ExpenseDTO[] = filteredExpenses) => {
         const categoryData: { [key: string]: number } = {};
         expensesToUse.forEach(expense => {
@@ -145,11 +129,9 @@ const DashboardPage: React.FC = () => {
         const labels = Object.keys(categoryData);
         const amounts = Object.values(categoryData);
         return { labels, amounts };
-
     };
 
     const prepareTimeData = (expensesToUse: ExpenseDTO[] = filteredExpenses) => {
-
         const dailySpending: { [key: string]: number } = {};
         expensesToUse.forEach(expense => {
             const dateStr = new Date(expense.date).toISOString().split('T')[0];
@@ -159,9 +141,7 @@ const DashboardPage: React.FC = () => {
         const sortedDates = Object.keys(dailySpending).sort();
         const amounts = sortedDates.map(date => dailySpending[date]);
         return { labels: sortedDates, amounts };
-
     };
-
 
     const prepareRadarData = (currentPeriodExpenses: ExpenseDTO[], previousPeriodExpenses: ExpenseDTO[]) => {
         const currentCategoryData = prepareCategoryData(currentPeriodExpenses);
@@ -190,7 +170,6 @@ const DashboardPage: React.FC = () => {
         };
     };
 
-
     const categoryData = prepareCategoryData();
     const doughnutChartData = {
         labels: categoryData.labels,
@@ -213,7 +192,6 @@ const DashboardPage: React.FC = () => {
             borderWidth: 1,
         }],
     };
-
 
     const barChartData = {
         labels: categoryData.labels,
@@ -253,8 +231,8 @@ const DashboardPage: React.FC = () => {
         }
         const startOfPeriod = getStartOfPeriod(startOfPreviousPeriod, currentPeriod);
         return expenses.filter(expense => new Date(expense.date) >= startOfPeriod && new Date(expense.date) < getStartOfPeriod(now, currentPeriod));
-
     };
+
     const previousPeriodExpenses = getPreviousPeriodExpenses(selectedPeriod, expenses);
     const radarChartData = prepareRadarData(filteredExpenses, previousPeriodExpenses);
 
@@ -266,7 +244,7 @@ const DashboardPage: React.FC = () => {
         <div className={styles.dashboardPage}>
             <div className={styles.header}>
                 <div className={styles.totalSpending}>
-                    Total: €{totalSpending.toFixed(2)}
+                    Total: €{totalSpending.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <div className={styles.periodSelection}>
                     <button
@@ -278,7 +256,6 @@ const DashboardPage: React.FC = () => {
                     <button
                         onClick={() => setSelectedPeriod('week')}
                         className={selectedPeriod === 'week' ? styles.active : ''}
-
                     >
                         Week
                     </button>

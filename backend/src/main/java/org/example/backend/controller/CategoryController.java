@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5175")
 
 
 public class CategoryController {

@@ -48,7 +48,7 @@ const AddExpensePage: React.FC = () => {
 
     return (
         <div>
-            <h1>Add Expense</h1>
+
             <ExpenseForm onSubmit={handleSubmit} showCategoryField={!category} categories={categories} />
         </div>
     );

@@ -1,19 +1,29 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route,  NavLink } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AddExpensePage from './pages/AddExpensePage';
 import EditExpensePage from './pages/EditExpensePage';
 import CategoriesPage from './pages/CategoriesPage';
 import DashboardPage from './pages/DashboardPage';
 import styles from './App.module.css';
-import { FaChartLine } from 'react-icons/fa';
+import {  FaChartLine, FaPlus, FaList, FaHome } from 'react-icons/fa'; // Import icons
+
 
 const App: React.FC = () => {
+
+
     return (
         <Router>
             <div className={styles.appWrapper}>
-                <AppNavigation />
+                <nav className={styles.sidebar}>
+                    <AppNavigation />
+                </nav>
+
                 <div className={styles.contentWrapper}>
+
+                    <header className={styles.appHeader}>
+                        <h1>Spending Harmony</h1>
+                    </header>
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/add-expense" element={<AddExpensePage />} />
@@ -27,16 +37,26 @@ const App: React.FC = () => {
     );
 };
 
-const AppNavigation: React.FC = () => {
-    return (
-        <nav className={styles.navbar}>
-            <Link to="/" className={styles.navLink}>Spending Harmony</Link>
-            <Link to="/dashboard" className={styles.navLink}>
-                <FaChartLine style={{ marginRight: '5px' }} />
-                Dashboard
-            </Link>
-        </nav>
+
+
+const AppNavigation: React.FC = () => { // No props needed
+
+    return(
+        <>
+            <NavLink to="/" className={({isActive}) => `${styles.sidebarLink} ${isActive? styles.active : ''}`}>
+                <FaHome style={{ marginRight: '5px' }} /> Home
+            </NavLink>
+            <NavLink to="/add-expense" className={({isActive}) => `${styles.sidebarLink} ${isActive? styles.active : ''}`}>
+                <FaPlus style={{ marginRight: '5px' }} /> Add Expense
+            </NavLink>
+            <NavLink to="/categories" className={({isActive}) => `${styles.sidebarLink} ${isActive? styles.active : ''}`}>
+                <FaList style={{ marginRight: '5px' }} /> Categories
+            </NavLink>
+            <NavLink to="/dashboard" className={({isActive}) => `${styles.sidebarLink} ${isActive? styles.active : ''}`}>
+                <FaChartLine style={{ marginRight: '5px' }} />Dashboard
+            </NavLink>
+        </>
     );
-}
+};
 
 export default App;

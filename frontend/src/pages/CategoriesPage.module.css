@@ -1,29 +1,192 @@
 
-.categoryFilter {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    background-color: white;
 
-    max-height: 250px;
-    overflow-y: auto;
-
+.categoriesPage {
+    padding: 20px;
+    width: 100%;
 }
 
-.categoryFilter h4 {
-    margin-top: 0;
+.categoryList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.categoryItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: transform 0.1s ease;
+}
+
+.categoryItem:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.categoryButton {
+    background-color: transparent;
+    color: #007bff;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition:  color 0.3s ease;
+    box-shadow: none;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.categoryButton:hover {
+    color: #0056b3;
+    background-color: transparent;
+    transform: none;
+    box-shadow: none;
+}
+
+.categoryButton:active{
+    transform: none;
+}
+
+.addCategoryContainer {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+}
+
+.addCategoryInput {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 100%;
     margin-bottom: 10px;
 }
 
-.checkboxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 5px 10px;
-
+.addCategoryInput:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-.checkboxItem label{
+
+.addCategoryButton {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.addCategoryButton:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.addCategoryButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.addExpenseButton {
+    background-color: #e27d60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.addExpenseButton:hover {
+    background-color: #c86948;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.addExpenseButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.2s ease, transform 0.2s ease;
+    font-size: 1.1em;
+}
+
+.iconButton:hover {
+    color: #007bff;
+    transform: scale(1.1);
+}
+
+.iconButton:active {
+    transform: scale(0.9);
+}
+
+.editCategoryContainer {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.editCategoryInput {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    flex-grow: 1;
+}
+
+.saveEditButton, .cancelEditButton {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.saveEditButton {
+    background-color: #28a745;
+    color: white;
+    margin-right: 5px;
+}
+
+.cancelEditButton {
+    background-color: #dc3545;
+    color: white;
+}
+
+.saveEditButton:hover {
+    background-color: #218838;
+}
+
+.cancelEditButton:hover {
+    background-color: #c82333;
 }

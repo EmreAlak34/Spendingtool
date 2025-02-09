@@ -93,14 +93,14 @@ class ExpenseServiceTest {
 
     @Test
     void testDeleteExpenseNotFound() {
-        // Mock existsById to return false, simulating a non-existent expense
-        when(expenseRepository.existsById("2")).thenReturn(false); // THIS IS KEY
 
-        // Assert that ExpenseNotFoundException is thrown
+        when(expenseRepository.existsById("2")).thenReturn(false);
+
+
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.deleteExpense("2"));
 
-        // Verify that deleteById was *not* called
-        verify(expenseRepository, never()).deleteById("2"); // ALSO IMPORTANT
+
+        verify(expenseRepository, never()).deleteById("2");
     }
 
     @Test

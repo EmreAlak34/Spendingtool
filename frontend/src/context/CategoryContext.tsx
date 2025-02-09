@@ -105,4 +105,5 @@ export const useCategoryContext = () => {
         throw new Error('useCategoryContext must be used within a CategoryProvider');
     }
     return context;
+
 };

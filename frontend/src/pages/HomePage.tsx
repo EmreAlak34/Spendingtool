@@ -52,7 +52,7 @@ const HomePage: React.FC = () => {
 
     return (
         <div className={styles.homePage}>
-            {/* Welcome Section */}
+
             <section className={styles.welcomeSection}>
                 <h1>Welcome to Spending Harmony!</h1>
                 <p>Track your expenses and stay on top of your finances.</p>

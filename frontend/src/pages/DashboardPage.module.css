@@ -1,0 +1,68 @@
+
+.dashboardPage {
+
+    width: 100%;
+
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.totalSpending {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.periodSelection button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin-left: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+}
+
+.periodSelection button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+.periodSelection button:active{
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.periodSelection button.active {
+    background-color: #0056b3;
+    font-weight: bold;
+}
+
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.chartContainer {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.chartContainer h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 1.25rem;
+}
+

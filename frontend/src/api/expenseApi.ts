@@ -1,14 +1,33 @@
-
 import axios from 'axios';
 import { ExpenseDTO } from '../types/ExpenseDTO';
 import { CategoryDTO } from '../types/CategoryDTO';
 
 const API_URL = '/api/expenses';
-const CATEGORY_API_URL = '/api/categories';
+const CATEGORY_API_URL = 'http://localhost:8080/api/categories';
 
+export const fetchExpenses = async (
+    description?: string,
+    category?: string | null,
+    minAmount?: number,
+    maxAmount?: number,
+    startDate?: string,
+    endDate?: string,
+    sortBy?: string,
+    sortDirection?: string
 
-export const fetchExpenses = async (): Promise<ExpenseDTO[]> => {
-    const response = await axios.get(API_URL);
+): Promise<ExpenseDTO[]> => {
+
+    const params = new URLSearchParams();
+    if (description) params.append('description', description);
+    if (category) params.append('category', category);
+    if (minAmount !== undefined) params.append('minAmount', minAmount.toString());
+    if (maxAmount !== undefined) params.append('maxAmount', maxAmount.toString());
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    if (sortBy) params.append('sortBy', sortBy);
+    if (sortDirection) params.append('sortDirection', sortDirection);
+
+    const response = await axios.get(API_URL, { params });
     return response.data;
 };
 
@@ -31,20 +50,18 @@ export const deleteExpense = async (id: string): Promise<void> => {
     await axios.delete(`${API_URL}/${id}`);
 };
 
-
-
 export const fetchCategories = async (): Promise<CategoryDTO[]> => {
-    const response = await axios.get<CategoryDTO[]>(CATEGORY_API_URL); // Use correct type
+    const response = await axios.get<CategoryDTO[]>(CATEGORY_API_URL);
     return response.data;
 };
 
 export const createCategory = async (categoryName: string): Promise<CategoryDTO> => {
-    const response = await axios.post<CategoryDTO>(CATEGORY_API_URL, { name: categoryName }); // Send object
+    const response = await axios.post<CategoryDTO>(CATEGORY_API_URL, { name: categoryName });
     return response.data;
 };
 
 export const updateCategory = async (id: string, categoryName: string): Promise<CategoryDTO> => {
-    const response = await axios.put<CategoryDTO>(`${CATEGORY_API_URL}/${id}`, { name: categoryName }); // Send object
+    const response = await axios.put<CategoryDTO>(`${CATEGORY_API_URL}/${id}`, { name: categoryName });
     return response.data;
 };
 

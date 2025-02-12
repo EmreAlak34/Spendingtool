@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExpenseDTO } from '../types/ExpenseDTO';
@@ -7,8 +6,6 @@ import styles from './ExpenseList.module.css';
 interface ExpenseListProps {
     expenses: ExpenseDTO[];
     onDelete: (id: string) => Promise<void>;
-
-
 }
 
 const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
@@ -23,7 +20,13 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDelete }) => {
                 {expenses.map((expense) => (
                     <li key={expense.id} className={styles.expenseItem}>
                         <span>
-                            {expense.description} - €{expense.amount.toFixed(2)} ({expense.category})
+                            {expense.description} - {expense.amount.toFixed(2)} € - {
+                            new Date(expense.date).toLocaleDateString('de-DE', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                            })
+                        }
                         </span>
                         <div>
                             <button

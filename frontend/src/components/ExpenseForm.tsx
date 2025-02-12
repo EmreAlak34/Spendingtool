@@ -1,16 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { ExpenseDTO } from '../types/ExpenseDTO';
+import { CategoryDTO } from '../types/CategoryDTO';
 import styles from './ExpenseForm.module.css';
-import { categories } from '../constants';
 
 interface ExpenseFormProps {
     onSubmit: (expense: ExpenseDTO) => Promise<void>;
     initialData?: ExpenseDTO;
     showCategoryField?: boolean;
+    categories: CategoryDTO[];
 }
 
-const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCategoryField = true }) => {
+const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCategoryField = true, categories }) => {
     const [description, setDescription] = useState(initialData?.description || '');
     const [amount, setAmount] = useState(initialData?.amount.toString() || '');
     const [category, setCategory] = useState(initialData?.category || '');
@@ -30,10 +30,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCa
             description,
             amount: parseFloat(amount),
             category: showCategoryField ? category : initialData?.category || '',
+            date: new Date().toISOString().split('T')[0],
+
         };
 
         await onSubmit(expenseDTO);
     };
+
+    const sortedCategories = [...categories].sort((a, b) => a.name.localeCompare(b.name));
 
     return (
         <form onSubmit={handleSubmit} className={styles.expenseForm}>
@@ -72,8 +76,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSubmit, initialData, showCa
                             className={styles.input}
                         >
                             <option value="" disabled>Select a category</option>
-                            {categories.map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
+                            {sortedCategories.map(cat => (
+                                <option key={cat.id} value={cat.name}>{cat.name}</option>
                             ))}
                         </select>
                     </label>

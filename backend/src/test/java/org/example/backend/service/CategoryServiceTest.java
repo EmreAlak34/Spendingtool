@@ -1,10 +1,9 @@
-package org.example.backend.CategoryService;
+package org.example.backend.service;
 
 import org.example.backend.dto.CategoryDTO;
 import org.example.backend.exception.CategoryNotFoundException;
 import org.example.backend.model.Category;
 import org.example.backend.repository.CategoryRepository;
-import org.example.backend.service.CategoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

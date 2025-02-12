@@ -114,7 +114,7 @@ class ExpenseControllerIntegrationTest {
 
 
 
-        
+
 
         ExpenseDTO updatedExpense = new ExpenseDTO(savedExpense.getId(), "Updated Description", 75.0, "Food", savedExpense.getDate());
 
@@ -136,7 +136,7 @@ class ExpenseControllerIntegrationTest {
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
 
 
-        
+
 
         ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
 

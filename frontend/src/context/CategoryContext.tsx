@@ -26,7 +26,6 @@ export const CategoryProvider: React.FC<CategoryProviderProps> = ({ children }) 
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-
     useEffect(() => {
         const savedFavorites = localStorage.getItem('favoriteCategories');
         if (savedFavorites) {
@@ -39,11 +38,9 @@ export const CategoryProvider: React.FC<CategoryProviderProps> = ({ children }) 
         }
     }, []);
 
-
     useEffect(() => {
         localStorage.setItem('favoriteCategories', JSON.stringify(favoriteCategoryIds));
     }, [favoriteCategoryIds]);
-
 
     const fetchCategoriesData = async () => {
         setIsLoadingCategories(true);
@@ -80,7 +77,6 @@ export const CategoryProvider: React.FC<CategoryProviderProps> = ({ children }) 
     useEffect(() => {
         fetchCategoriesData();
     }, []);
-
 
     const contextValue = {
         categories,

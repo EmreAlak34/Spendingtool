@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { fetchExpenses, deleteExpense, createCategory, updateCategory, deleteCategory } from '../api/expenseApi';
 import ExpenseList from '../components/ExpenseList';
 import { ExpenseDTO } from '../types/ExpenseDTO';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './CategoriesPage.module.css';
 import axios from 'axios';
 import { FaTrashAlt, FaEdit } from 'react-icons/fa';
 import { useCategoryContext } from '../context/CategoryContext';
+import { categories as defaultCategories } from '../constants';
 
 const CategoriesPage: React.FC = () => {
     const [expenses, setExpenses] = useState<ExpenseDTO[]>([]);
@@ -20,7 +20,6 @@ const CategoriesPage: React.FC = () => {
     const location = useLocation();
     const [sortBy, setSortBy] = useState<keyof ExpenseDTO>('date');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -68,6 +67,7 @@ const CategoriesPage: React.FC = () => {
             }
         }
     };
+
     const handleStartEdit = (categoryName: string) => {
         const category = categories.find(cat => cat.name === categoryName);
         if (category) {
@@ -89,7 +89,6 @@ const CategoriesPage: React.FC = () => {
                     updatedCategories.sort((a, b) => a.name.localeCompare(b.name));
                     return updatedCategories;
                 });
-
 
                 const updatedExpenses = expenses.map(expense => {
                     if (expense.category === oldCategoryName) {
@@ -164,17 +163,14 @@ const CategoriesPage: React.FC = () => {
             comparison = (aValue as number) - (bValue as number);
         } else if (sortBy === 'date') {
             comparison = new Date(aValue as string).getTime() - new Date(bValue as string).getTime();
-        }  else if (typeof aValue === 'string' && typeof bValue === 'string') {
+        } else if (typeof aValue === 'string' && typeof bValue === 'string') {
             comparison = aValue.localeCompare(bValue);
         }
         return sortDirection === 'asc' ? comparison : -comparison;
     });
 
-
     return (
         <div>
-
-
             <div className={styles.addCategoryContainer}>
                 <input
                     type="text"
@@ -211,20 +207,24 @@ const CategoriesPage: React.FC = () => {
                                 >
                                     {category.name}
                                 </button>
-                                <button
-                                    onClick={() => {handleStartEdit(category.name);}}
-                                    className={styles.iconButton}
-                                    aria-label="Rename Category"
-                                >
-                                    <FaEdit />
-                                </button>
-                                <button
-                                    onClick={() => {handleDeleteCategory(category.id);}}
-                                    className={styles.iconButton}
-                                    aria-label="Delete Category"
-                                >
-                                    <FaTrashAlt />
-                                </button>
+                                {!defaultCategories.includes(category.name) && (
+                                    <>
+                                        <button
+                                            onClick={() => { handleStartEdit(category.name); }}
+                                            className={styles.iconButton}
+                                            aria-label="Rename Category"
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                        <button
+                                            onClick={() => { handleDeleteCategory(category.id); }}
+                                            className={styles.iconButton}
+                                            aria-label="Delete Category"
+                                        >
+                                            <FaTrashAlt />
+                                        </button>
+                                    </>
+                                )}
                             </>
                         )}
                     </div>

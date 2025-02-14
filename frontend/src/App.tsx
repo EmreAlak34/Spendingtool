@@ -39,7 +39,7 @@ const App: React.FC = () => {
 
 
 
-const AppNavigation: React.FC = () => { // No props needed
+const AppNavigation: React.FC = () => {
 
     return(
         <>

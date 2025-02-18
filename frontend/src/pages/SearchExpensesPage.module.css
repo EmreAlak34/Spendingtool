@@ -19,7 +19,23 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    width: 300px;
+    width: 600px;
+}
+
+.sliderWithRange {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.slider {
+    width: 100%;
+}
+
+.rangeDisplay {
+    font-size: 14px;
+    color: #555;
 }
 
 .searchButton {

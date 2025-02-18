@@ -43,13 +43,19 @@ const SearchExpensesPage: React.FC = () => {
             />
             <div className={styles.sliderContainer}>
                 <label>Amount range:</label>
-                <Slider
-                    value={searchAmountRange}
-                    onChange={(_, newValue) => setSearchAmountRange(newValue as number[])}
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={1000}
-                />
+                <div className={styles.sliderWithRange}>
+                    <Slider
+                        value={searchAmountRange}
+                        onChange={(_, newValue) => setSearchAmountRange(newValue as number[])}
+                        valueLabelDisplay="auto"
+                        min={0}
+                        max={1000}
+                        className={styles.slider}
+                    />
+                    <div className={styles.rangeDisplay}>
+                        {searchAmountRange[0]} € - {searchAmountRange[1]} €
+                    </div>
+                </div>
             </div>
             <button onClick={handleSearchExpenses} className={styles.searchButton}>Search</button>
 

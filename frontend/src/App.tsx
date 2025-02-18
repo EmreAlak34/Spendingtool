@@ -5,7 +5,7 @@ import AddExpensePage from './pages/AddExpensePage';
 import EditExpensePage from './pages/EditExpensePage';
 import CategoriesPage from './pages/CategoriesPage';
 import DashboardPage from './pages/DashboardPage';
-import SearchExpensesPage from './pages/SearchExpensesPage';
+import SearchExpensesPage from './pages/SearchExpensesPage'; // Import the new page
 import styles from './App.module.css';
 import { FaChartLine, FaPlus, FaList, FaHome, FaSearch } from 'react-icons/fa';
 
@@ -24,9 +24,9 @@ const App: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/add-expense" element={<AddExpensePage />} />
-                        <Route path="/search-expenses" element={<SearchExpensesPage />} />
                         <Route path="/edit-expense/:id" element={<EditExpensePage />} />
                         <Route path="/categories" element={<CategoriesPage />} />
+                        <Route path="/search-expenses" element={<SearchExpensesPage />} /> {/* Add the new route */}
                         <Route path="/dashboard" element={<DashboardPage />} />
                     </Routes>
                 </div>
@@ -44,11 +44,11 @@ const AppNavigation: React.FC = () => {
             <NavLink to="/add-expense" className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.active : ''}`}>
                 <FaPlus style={{ marginRight: '5px' }} /> Add Expense
             </NavLink>
-            <NavLink to="/search-expenses" className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.active : ''}`}>
-                <FaSearch style={{ marginRight: '5px' }} /> Search Expenses
-            </NavLink>
             <NavLink to="/categories" className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.active : ''}`}>
                 <FaList style={{ marginRight: '5px' }} /> Categories
+            </NavLink>
+            <NavLink to="/search-expenses" className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.active : ''}`}>
+                <FaSearch style={{ marginRight: '5px' }} /> Search Expenses
             </NavLink>
             <NavLink to="/dashboard" className={({ isActive }) => `${styles.sidebarLink} ${isActive ? styles.active : ''}`}>
                 <FaChartLine style={{ marginRight: '5px' }} /> Dashboard

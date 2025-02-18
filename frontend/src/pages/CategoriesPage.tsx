@@ -234,22 +234,34 @@ const CategoriesPage: React.FC = () => {
             {selectedCategory && (
                 <div>
                     <h2>{selectedCategory}</h2>
-                    <div>
-                        <label>
-                            Sort By:
-                            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as keyof ExpenseDTO)}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div className={styles.sortByContainer}>
+                            <label>
+                                Sort By:
+                            </label>
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value as keyof ExpenseDTO)}
+                                className={styles.sortByInput}
+                            >
                                 <option value="date">Date</option>
                                 <option value="amount">Amount</option>
                                 <option value="description">Alphabetically</option>
                             </select>
-                        </label>
-                        <label>
-                            Direction:
-                            <select value={sortDirection} onChange={(e) => setSortDirection(e.target.value as 'asc' | 'desc')}>
+                        </div>
+                        <div className={styles.directionContainer}>
+                            <label>
+                                Direction:
+                            </label>
+                            <select
+                                value={sortDirection}
+                                onChange={(e) => setSortDirection(e.target.value as 'asc' | 'desc')}
+                                className={styles.directionInput}
+                            >
                                 <option value="asc">Ascending</option>
                                 <option value="desc">Descending</option>
                             </select>
-                        </label>
+                        </div>
                     </div>
                     <button
                         onClick={() => navigate(`/add-expense?category=${selectedCategory}`)}

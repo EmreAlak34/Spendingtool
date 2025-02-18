@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 200px; /* Ensure consistent width for both input and button */
+    width: 200px;
 }
 
 .addCategoryInput {
@@ -92,4 +92,36 @@
 .saveEditButton:hover,
 .cancelEditButton:hover {
     background-color: #0056b3;
+}
+
+.addExpenseButton {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.addExpenseButton:hover {
+    background-color: #218838;
+}
+
+
+.sortByInput,
+.directionInput {
+    width: 160px;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-right: 20px;
+}
+
+.sortByContainer,
+.directionContainer {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
 }

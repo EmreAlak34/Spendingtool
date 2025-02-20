@@ -93,13 +93,8 @@ class ExpenseServiceTest {
 
     @Test
     void testDeleteExpenseNotFound() {
-
         when(expenseRepository.existsById("2")).thenReturn(false);
-
-
         assertThrows(ExpenseNotFoundException.class, () -> expenseService.deleteExpense("2"));
-
-
         verify(expenseRepository, never()).deleteById("2");
     }
 

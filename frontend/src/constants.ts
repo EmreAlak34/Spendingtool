@@ -9,5 +9,4 @@ export const categories = [
     'Car',
     'Friends',
     'Other',
-
 ];

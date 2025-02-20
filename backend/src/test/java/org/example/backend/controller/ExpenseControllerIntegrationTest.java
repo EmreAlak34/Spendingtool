@@ -41,7 +41,7 @@ class ExpenseControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         expenseRepository.deleteAll();
-        testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food", LocalDate.now()); // Include date
+        testExpenseFood = new ExpenseDTO(null, "Groceries", 50.0, "Food", LocalDate.now());
     }
 
     @AfterEach
@@ -59,7 +59,7 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.description").value("Groceries"))
                 .andExpect(jsonPath("$.amount").value(50.0))
                 .andExpect(jsonPath("$.category").value("Food"))
-                .andExpect(jsonPath("$.date").exists()); // Verify date is present
+                .andExpect(jsonPath("$.date").exists());
     }
 
     @Test
@@ -75,7 +75,7 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].description").value("Groceries"))
                 .andExpect(jsonPath("$[0].amount").value(50.0))
                 .andExpect(jsonPath("$[0].category").value("Food"))
-                .andExpect(jsonPath("$[0].date").exists()); // Verify date is present
+                .andExpect(jsonPath("$[0].date").exists());
     }
 
     @Test
@@ -108,7 +108,6 @@ class ExpenseControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andReturn().getResponse().getContentAsString();
-
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
 
 
@@ -125,7 +124,6 @@ class ExpenseControllerIntegrationTest {
                 .andExpect(jsonPath("$.description").value("Updated Description"))
                 .andExpect(jsonPath("$.amount").value(75.0))
                 .andExpect(jsonPath("$.category").value("Food"))
-
                 .andExpect(jsonPath("$.date").value(savedExpense.getDate().toString()));
 
 
@@ -134,12 +132,7 @@ class ExpenseControllerIntegrationTest {
 
     @Test
     void shouldReturnNotFoundWhenUpdatingNonexistentExpense() throws Exception {
-
-
-
-
         ExpenseDTO updatedExpense = new ExpenseDTO("nonexistent-id", "Updated", 100.0, "Other", LocalDate.now());
-
         mockMvc.perform(put("/api/expenses/nonexistent-id")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedExpense)))
@@ -152,12 +145,9 @@ class ExpenseControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testExpenseFood)))
                 .andReturn().getResponse().getContentAsString();
-
         ExpenseDTO savedExpense = objectMapper.readValue(response, ExpenseDTO.class);
-
         mockMvc.perform(delete("/api/expenses/" + savedExpense.getId()))
                 .andExpect(status().isOk());
-
         mockMvc.perform(get("/api/expenses/" + savedExpense.getId()))
                 .andExpect(status().isNotFound());
     }

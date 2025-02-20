@@ -222,14 +222,7 @@ const CategoriesPage: React.FC = () => {
                                             aria-label="Delete Category"
                                         >
                                             <FaTrashAlt />
-                                        </button>
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </div>
-                ))}
-            </div>
+                                        </button></>)}</>)}</div>))}</div>
 
             {selectedCategory && (
                 <div>

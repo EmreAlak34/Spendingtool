@@ -107,11 +107,9 @@ class CategoryServiceTest {
         Category anotherExistingCategory = new Category("2", "ExistingCategory");
         when(categoryRepository.findById("1")).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.findByName("ExistingCategory")).thenReturn(Optional.of(anotherExistingCategory));
-
         assertThrows(IllegalArgumentException.class, () -> {
             categoryService.updateCategory("1", updatedCategoryDTO);
         });
-
         verify(categoryRepository).findById("1");
         verify(categoryRepository).findByName("ExistingCategory");
         verify(categoryRepository, never()).save(any(Category.class));
@@ -121,9 +119,7 @@ class CategoryServiceTest {
     void deleteCategory_shouldDeleteCategory() {
         when(categoryRepository.existsById("1")).thenReturn(true);
         doNothing().when(categoryRepository).deleteById(anyString());
-
         assertDoesNotThrow(() -> categoryService.deleteCategory("1"));
-
         verify(categoryRepository).existsById("1");
         verify(categoryRepository).deleteById("1");
     }
@@ -131,7 +127,6 @@ class CategoryServiceTest {
     @Test
     void deleteCategory_shouldThrowExceptionIfCategoryNotFound() {
         when(categoryRepository.existsById("2")).thenReturn(false);
-
         assertThrows(CategoryNotFoundException.class, () -> {
             categoryService.deleteCategory("2");
         });
@@ -142,9 +137,7 @@ class CategoryServiceTest {
     void getCategoryById_shouldReturnCategoryDTO() {
         Category existingCategory = new Category("1", "Groceries");
         when(categoryRepository.findById("1")).thenReturn(Optional.of(existingCategory));
-
         Optional<CategoryDTO> result = categoryService.getCategoryById("1");
-
         assertTrue(result.isPresent());
         assertEquals("Groceries", result.get().getName());
         verify(categoryRepository).findById("1");
@@ -153,9 +146,7 @@ class CategoryServiceTest {
     @Test
     void getCategoryById_shouldReturnEmptyOptionalIfNotFound() {
         when(categoryRepository.findById("2")).thenReturn(Optional.empty());
-
         Optional<CategoryDTO> result = categoryService.getCategoryById("2");
-
         assertFalse(result.isPresent());
         verify(categoryRepository).findById("2");
     }

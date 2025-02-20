@@ -26,7 +26,7 @@ const App: React.FC = () => {
                         <Route path="/add-expense" element={<AddExpensePage />} />
                         <Route path="/edit-expense/:id" element={<EditExpensePage />} />
                         <Route path="/categories" element={<CategoriesPage />} />
-                        <Route path="/search-expenses" element={<SearchExpensesPage />} /> {/* Add the new route */}
+                        <Route path="/search-expenses" element={<SearchExpensesPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
                     </Routes>
                 </div>

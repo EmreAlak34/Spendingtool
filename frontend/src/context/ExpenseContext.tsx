@@ -6,7 +6,7 @@ import { fetchExpenses } from '../api/expenseApi';
 interface ExpenseContextProps {
     expenses: ExpenseDTO[];
     setExpenses: React.Dispatch<React.SetStateAction<ExpenseDTO[]>>;
-    refreshExpenses: () => Promise<void>; // Add this for manual refresh
+    refreshExpenses: () => Promise<void>;
 }
 
 const ExpenseContext = createContext<ExpenseContextProps | undefined>(undefined);

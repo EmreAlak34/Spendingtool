@@ -4,7 +4,6 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-
 }
 
 
@@ -14,7 +13,6 @@
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
-
 }
 
 .logo:hover {
@@ -32,11 +30,8 @@
   from {
     transform: rotate(0deg);
   }
-
   to {
-    transform: rotate(360deg);
-  }
-
+    transform: rotate(360deg);}
 }
 
 
@@ -44,9 +39,7 @@
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
-  }
-
-}
+  }  }
 
 
 
